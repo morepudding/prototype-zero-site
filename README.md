@@ -16,7 +16,7 @@ La présentation reste statique. Une fonction Vercel stocke les choix dans une b
 
 La page `/choix.html` présente le blaster en gravure comme référence validée. Elle propose deux variantes dans ce style pour le shotgun, Modulo Drone, Javelin, Magnetic Field, Static Shield, Pyro Boots, Bio Injector, Baroud d’honneur et Omnivamp. Chaque choix peut être enregistré et modifié séparément. Elle regroupe aussi les trois sons du blaster. Les votes sont stockés dans Upstash Redis et la page affiche le décompte A/B par élément.
 
-L’API nécessite `UPSTASH_REDIS_REST_URL` et `UPSTASH_REDIS_REST_TOKEN`, fournis par l’intégration Upstash Redis de Vercel.
+L’API nécessite `KV_REST_API_URL` et `KV_REST_API_TOKEN`, fournis par l’intégration Upstash Redis de Vercel.
 
 ## Voir le site en local
 
