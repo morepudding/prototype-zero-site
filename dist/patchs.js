@@ -99,15 +99,20 @@ async function confirmPull(push, reader, button) {
 function renderPush(push, index) {
   const article = document.createElement('article');
   article.className = 'patch-card';
+  article.id = `push-${push.commit}`;
   const visual = document.createElement('div');
-  visual.className = `patch-card-visual${push.imageStyle === 'icon' ? ' patch-card-visual-icon' : ''}`;
-  const image = document.createElement('img');
-  image.src = push.image;
-  image.alt = push.imageAlt;
-  image.loading = 'eager';
-  image.width = 1280;
-  image.height = 720;
-  visual.append(image);
+  visual.className = `patch-card-visual${push.imageStyle === 'icon' ? ' patch-card-visual-icon' : ''}${push.image ? '' : ' patch-card-visual-auto'}`;
+  if (push.image) {
+    const image = document.createElement('img');
+    image.src = push.image;
+    image.alt = push.imageAlt;
+    image.loading = 'eager';
+    image.width = 1280;
+    image.height = 720;
+    visual.append(image);
+  } else {
+    addText(visual, 'strong', 'patch-card-visual-title', push.title);
+  }
   addText(visual, 'span', 'patch-card-visual-label', `PUSH ${String(index + 1).padStart(2, '0')} / ${push.commit.slice(0, 7)}`);
 
   const body = document.createElement('div');
@@ -173,12 +178,14 @@ function renderPush(push, index) {
 
 async function loadPushes() {
   try {
-    const response = await fetch('./data/patchs.json');
+    let response = await fetch('/api/game-pushes', {cache: 'no-store'});
+    if (!response.ok) response = await fetch('./data/patchs.json');
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
     const data = await response.json();
     if (!Array.isArray(data.pushes)) throw new Error('Document invalide');
     pushList = data.pushes;
     pushList.forEach((push, index) => list.append(renderPush(push, index)));
+    if (location.hash.startsWith('#push-')) document.getElementById(location.hash.slice(1))?.scrollIntoView();
     status.textContent = pushList.length ? '' : 'Aucun push publié pour le moment.';
     status.hidden = pushList.length > 0;
   } catch (_) {

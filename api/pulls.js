@@ -1,5 +1,5 @@
 const { Redis } = require('@upstash/redis');
-const { pushes } = require('../dist/data/patchs.json');
+const { listPushes } = require('./game-pushes');
 
 const READERS = new Set(['BotteroRomain', 'aKoMoses']);
 const KEY_PREFIX = 'prototype0:game-pull:';
@@ -18,7 +18,7 @@ function recordKey(commit, reader) {
   return `${KEY_PREFIX}${commit}:${reader}`;
 }
 
-function validPair(commit, reader) {
+function validPair(pushes, commit, reader) {
   return READERS.has(reader) && pushes.some(push => push.commit === commit && push.author !== reader);
 }
 
@@ -31,9 +31,10 @@ module.exports = async function handler(request, response) {
 
   try {
     const redis = getRedis();
+    const pushes = await listPushes(redis);
     if (request.method === 'POST') {
       const { commit, reader } = request.body || {};
-      if (typeof commit !== 'string' || typeof reader !== 'string' || !validPair(commit, reader)) {
+      if (typeof commit !== 'string' || typeof reader !== 'string' || !validPair(pushes, commit, reader)) {
         return response.status(400).json({ error: 'Confirmation invalide.' });
       }
       await redis.setnx(recordKey(commit, reader), new Date().toISOString());
