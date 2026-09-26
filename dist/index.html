@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#12100e">
+    <meta name="description" content="Prototype 0 : un duel de robots en arène 2,5D. Compose ton équipement, affronte le bot et suis le développement du jeu.">
+    <title>Prototype 0 — Entrez dans l'arène</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%2312100e'/%3E%3Cpath d='M13 45V19h15c8 0 12 4 12 11S36 41 28 41h-7v4Zm8-11h7c3 0 5-1 5-4s-2-4-5-4h-7Z' fill='%23f5ead8'/%3E%3Cpath d='M47 17v30M41 23h12M41 41h12' stroke='%23fb5b2b' stroke-width='5'/%3E%3C/svg%3E">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800;900&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./styles.css">
+    <script defer src="./app.js"></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Aller au contenu</a>
+    <div class="site-shell">
+      <header class="site-header" id="top">
+        <a class="brand" href="#top" aria-label="Prototype 0, accueil">
+          <span class="brand-mark">P<span>0</span><i></i></span>
+          <span class="brand-name">PROTOTYPE <b>0</b></span>
+        </a>
+        <button class="menu-toggle" type="button" aria-label="Ouvrir le menu" aria-controls="main-nav" aria-expanded="false"><span></span><span></span></button>
+        <nav class="main-nav" id="main-nav" aria-label="Navigation principale">
+          <a href="#jeu">Le jeu</a>
+          <a href="#arsenal">Équipement</a>
+          <a href="#projet">Le projet</a>
+          <a class="nav-github" href="https://github.com/aKoMoses/PROTOTYPE-V0.1" target="_blank" rel="noopener noreferrer">Voir le GitHub <span aria-hidden="true">↗</span></a>
+        </nav>
+      </header>
+
+      <main id="main">
+        <section class="hero" aria-labelledby="hero-title">
+          <div class="hero-image" role="img" aria-label="Capture de Prototype 0 : deux robots dans une arène de ferraille et de sable"></div>
+          <div class="hero-shade"></div>
+          <div class="hero-grid" aria-hidden="true"></div>
+          <div class="hero-content wrap">
+            <div class="eyebrow hero-eyebrow"><span class="eyebrow-line"></span> JEU DE COMBAT DE ROBOTS <span class="dot">●</span> V0.2</div>
+            <p class="hero-kicker">UN PROJET DE DEUX FRÈRES</p>
+            <h1 id="hero-title">ENTREZ<br>DANS <em>L’ARÈNE.</em></h1>
+            <p class="hero-copy">Un duel de robots en 2,5D. Compose ton équipement, lis le terrain et sois le premier à remporter trois manches.</p>
+            <div class="hero-actions">
+              <a class="button button-primary" href="#jeu">DÉCOUVRIR LE JEU <span aria-hidden="true">↘</span></a>
+              <a class="text-link" href="https://github.com/aKoMoses/PROTOTYPE-V0.1" target="_blank" rel="noopener noreferrer">SUIVRE LE DÉVELOPPEMENT <span aria-hidden="true">↗</span></a>
+            </div>
+          </div>
+          <div class="hero-bottom wrap">
+            <div><span class="tiny-label">MODE ACTUEL</span><strong>DUEL 1 CONTRE 1</strong></div>
+            <div><span class="tiny-label">OBJECTIF</span><strong>PREMIER À 3</strong></div>
+            <div class="hero-bottom-right"><span class="status-pulse"></span> PROTOTYPE EN DÉVELOPPEMENT</div>
+          </div>
+          <a class="scroll-cue" href="#jeu" aria-label="Défiler vers la présentation du jeu"><span></span> DÉFILER</a>
+        </section>
+
+        <div class="signal-strip" aria-hidden="true"><div>BLASTER <span>✳</span> SHOTGUN <span>✳</span> PYRO BOOTS <span>✳</span> JAVELIN <span>✳</span> STATIC SHIELD <span>✳</span> BLASTER <span>✳</span> SHOTGUN <span>✳</span> PYRO BOOTS <span>✳</span> JAVELIN <span>✳</span></div></div>
+
+        <section class="intro-section section-pad" id="jeu" aria-labelledby="intro-title">
+          <div class="wrap">
+            <div class="section-heading reveal">
+              <p class="section-index"><span>01</span> / LE JEU</p>
+              <h2 id="intro-title">CHAQUE MANCHE<br><em>SE GAGNE.</em></h2>
+              <p>Prototype 0 est un premier jeu d’arène pensé autour de combats courts et nerveux. Tu choisis ton arsenal, puis tu affrontes un bot dans un terrain où les couverts changent chaque trajectoire.</p>
+            </div>
+            <div class="feature-grid">
+              <article class="feature-card reveal">
+                <span class="feature-number">01 /</span>
+                <div class="feature-icon cross-icon" aria-hidden="true"><i></i></div>
+                <h3>DUEL DIRECT</h3>
+                <p>Un match local contre un bot, des manches successives et un score à faire grimper jusqu’à trois.</p>
+              </article>
+              <article class="feature-card reveal">
+                <span class="feature-number">02 /</span>
+                <div class="feature-icon bolt-icon" aria-hidden="true">↯</div>
+                <h3>BUILD À COMPOSER</h3>
+                <p>Arme, module offensif, défense, mobilité et passif : cinq choix pour inventer ta façon de te battre.</p>
+              </article>
+              <article class="feature-card reveal">
+                <span class="feature-number">03 /</span>
+                <div class="feature-icon arena-icon" aria-hidden="true"><i></i></div>
+                <h3>TERRAIN VIVANT</h3>
+                <p>Déplace-toi entre les couverts de ferraille. Les obstacles arrêtent aussi bien les robots que leurs projectiles.</p>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <section class="screenshot-section section-pad" aria-labelledby="arena-title">
+          <div class="wrap showcase-layout">
+            <div class="showcase-copy reveal">
+              <p class="section-index"><span>02</span> / L’ARÈNE</p>
+              <h2 id="arena-title">DU SABLE.<br>DE L’ACIER.<br><em>ZÉRO RÉPIT.</em></h2>
+              <p>Une arène 3D vue en 2,5D, des murs de ferraille, des caisses et des angles à exploiter. La caméra suit ton robot et anticipe ta visée pour garder le combat au centre.</p>
+              <div class="arena-facts"><div><strong>2,5D</strong><span>VUE DE JEU</span></div><div><strong>1v1</strong><span>COMBAT LOCAL</span></div><div><strong>3</strong><span>POINTS POUR GAGNER</span></div></div>
+            </div>
+            <figure class="showcase-image reveal">
+              <div class="image-corners" aria-hidden="true"></div>
+              <img src="./assets/duel.png" width="1280" height="720" loading="lazy" alt="Capture réelle du duel de Prototype 0 dans l’arène sableuse, avec les deux robots et l’interface de match">
+              <figcaption><span>CAPTURE DU PROTOTYPE V0.2</span><span>01 / 02</span></figcaption>
+            </figure>
+          </div>
+        </section>
+
+        <section class="arsenal-section section-pad" id="arsenal" aria-labelledby="arsenal-title">
+          <div class="wrap">
+            <div class="arsenal-top reveal">
+              <div><p class="section-index"><span>03</span> / ÉQUIPEMENT</p><h2 id="arsenal-title">CHOISIS TON<br><em>STYLE DE COMBAT.</em></h2></div>
+              <p>La victoire commence avant le duel. Sélectionne un choix dans chaque catégorie pour construire ton équipement.</p>
+            </div>
+            <div class="loadout">
+              <div class="loadout-menu reveal" aria-label="Catégories d’équipement">
+                <button class="loadout-tab active" type="button" data-loadout="arme" aria-pressed="true"><span>01</span> ARME <b>↗</b></button>
+                <button class="loadout-tab" type="button" data-loadout="offensif" aria-pressed="false"><span>02</span> OFFENSIF <b>↗</b></button>
+                <button class="loadout-tab" type="button" data-loadout="defensif" aria-pressed="false"><span>03</span> DÉFENSIF <b>↗</b></button>
+                <button class="loadout-tab" type="button" data-loadout="mobilite" aria-pressed="false"><span>04</span> MOBILITÉ <b>↗</b></button>
+                <button class="loadout-tab" type="button" data-loadout="passif" aria-pressed="false"><span>05</span> PASSIF <b>↗</b></button>
+              </div>
+              <div class="loadout-detail reveal" aria-live="polite">
+                <div class="loadout-detail-top"><span>ÉQUIPEMENT / <span id="loadout-index">01</span></span><span class="loadout-sight" aria-hidden="true">◎</span></div>
+                <p class="loadout-caption" id="loadout-caption">FRAPPE À DISTANCE</p>
+                <h3 id="loadout-name">BLASTER <span>OU</span> SHOTGUN</h3>
+                <p id="loadout-description">Précision et tir chargé d’un côté. Six plombs à courte portée de l’autre. Le choix de l’arme change le rythme de chaque échange.</p>
+                <div class="loadout-tags" id="loadout-tags"><span>TIR CHARGÉ</span><span>COURTE PORTÉE</span><span>CHOIX DE BUILD</span></div>
+                <span class="loadout-watermark" aria-hidden="true">01</span>
+              </div>
+            </div>
+            <figure class="equipment-shot reveal"><img src="./assets/equipment.png" width="1280" height="720" loading="lazy" alt="Capture réelle de l’écran d’équipement de Prototype 0 présentant les choix d’armes et de modules"><figcaption>ÉCRAN D’ÉQUIPEMENT DU PROTOTYPE V0.2 <span>02 / 02</span></figcaption></figure>
+          </div>
+        </section>
+
+        <section class="future-section" aria-labelledby="future-title">
+          <div class="future-text wrap reveal"><span class="future-stamp">LA SUITE DU PROJET <i>↗</i></span><h2 id="future-title">ET SI L’ARÈNE<br><em>DEVENAIT LA TIENNE&nbsp;?</em></h2><p>Au-delà du duel actuel, notre ambition est de laisser les joueurs personnaliser l’arène et d’en faire une vraie partie de leur stratégie.</p><span class="future-note">VISION EN DÉVELOPPEMENT</span></div>
+          <div class="future-rings" aria-hidden="true"><span></span><span></span><span></span></div>
+        </section>
+
+        <section class="project-section section-pad" id="projet" aria-labelledby="project-title">
+          <div class="wrap project-layout">
+            <div class="project-heading reveal"><p class="section-index"><span>04</span> / LE PROJET</p><h2 id="project-title">DEUX FRÈRES.<br><em>UN PREMIER JEU.</em></h2><p>Prototype 0 est notre terrain d’expérimentation. Nous construisons le jeu étape par étape, du ressenti des armes à la boucle complète des manches.</p><a class="button button-outline" href="https://github.com/aKoMoses/PROTOTYPE-V0.1" target="_blank" rel="noopener noreferrer">EXPLORER LE DÉPÔT <span aria-hidden="true">↗</span></a></div>
+            <div class="project-card reveal"><div class="project-card-image"><img src="./assets/result.png" width="1280" height="720" loading="lazy" alt="Capture de l’écran de résultat de Prototype 0"></div><div class="project-card-body"><div><span>JEU 001</span><span>EN DÉVELOPPEMENT</span></div><h3>PROTOTYPE 0</h3><p>Combat de robots · arène 2,5D · prototype V0.2</p></div></div>
+          </div>
+        </section>
+      </main>
+
+      <footer class="site-footer"><div class="wrap footer-top"><a class="brand" href="#top" aria-label="Retour en haut"><span class="brand-mark">P<span>0</span><i></i></span><span class="brand-name">PROTOTYPE <b>0</b></span></a><a href="https://github.com/aKoMoses/PROTOTYPE-V0.1" target="_blank" rel="noopener noreferrer">GITHUB ↗</a></div><div class="wrap footer-bottom"><span>UN PROJET DE DEUX FRÈRES.</span><span>PROTOTYPE 0 © 2026</span><a href="#top">RETOUR EN HAUT ↑</a></div></footer>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,4 @@
+.vercel/
+.sites-runtime/
+.sites-checkout/
+*.tar.gz
