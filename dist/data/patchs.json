@@ -1,0 +1,40 @@
+{
+  "pushes": [
+    {
+      "commit": "46fca8d99b1011aa6e62114d0a4b49fb67013c6e",
+      "author": "BotteroRomain",
+      "date": "2026-09-26",
+      "status": "a_recuperer",
+      "title": "Le Blaster a son icône et son son",
+      "summary": "Le dessin « Gravure » choisi pour le Blaster arrive dans le jeu, accompagné du son de tir « Plasma ».",
+      "changes": [
+        "L’icône du Blaster apparaît dans l’écran d’équipement et dans le HUD quand cette arme est active.",
+        "Chaque tir du Blaster joue le son Plasma, y compris un tir chargé.",
+        "Le test du Blaster vérifie que le son est bien chargé et joué."
+      ],
+      "image": "./assets/equipment-icons/blaster-gravure.png",
+      "imageAlt": "Icône Gravure du Blaster intégrée au jeu",
+      "imageStyle": "icon",
+      "audio": "./assets/audio/blaster_plasma.mp3",
+      "source": "https://github.com/aKoMoses/PROTOTYPE-V0.1/commit/46fca8d99b1011aa6e62114d0a4b49fb67013c6e"
+    },
+    {
+      "commit": "b354eb99f90dde9de94b30510cfdb3a42451ecc9",
+      "author": "aKoMoses",
+      "date": "2026-09-26",
+      "status": "a_recuperer",
+      "title": "La boucle de match V0.2",
+      "summary": "Le duel local devient un match complet : décompte, manches, score et victoire au premier à trois points.",
+      "changes": [
+        "Le décompte de trois secondes bloque les actions avant chaque manche. Une égalité ne donne aucun point et chaque mort ne compte qu’une seule fois.",
+        "Le bot est désactivé hors combat. Il garde en mémoire la dernière position visible et tient compte des obstacles et des hautes herbes.",
+        "L’écran d’équipement et le HUD affichent les détails du build, le score, les points de vie, les états et les temps de récupération.",
+        "Les identifiants de l’ancienne arme sont ramenés au Blaster ; la version Android 0.2.0 a été exportée et signée."
+      ],
+      "toTry": "L’APK doit encore être essayé sur un téléphone Android pour vérifier les contrôles tactiles, la lisibilité et la fluidité.",
+      "image": "./assets/result.png",
+      "imageAlt": "Écran de résultat d’une manche de la V0.2",
+      "source": "https://github.com/aKoMoses/PROTOTYPE-V0.1/commit/b354eb99f90dde9de94b30510cfdb3a42451ecc9"
+    }
+  ]
+}

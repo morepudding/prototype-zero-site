@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#12100e">
+    <meta name="description" content="Les derniers pushes du jeu Prototype 0 à récupérer, avec le détail des changements de chaque commit.">
+    <title>Pushes à récupérer — Prototype 0</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%2312100e'/%3E%3Cpath d='M13 45V19h15c8 0 12 4 12 11S36 41 28 41h-7v4Zm8-11h7c3 0 5-1 5-4s-2-4-5-4h-7Z' fill='%23f5ead8'/%3E%3Cpath d='M47 17v30M41 23h12M41 41h12' stroke='%23fb5b2b' stroke-width='5'/%3E%3C/svg%3E">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800;900&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./styles.css">
+    <script defer src="./patchs.js"></script>
+  </head>
+  <body class="patchs-page">
+    <a class="skip-link" href="#main">Aller au contenu</a>
+    <div class="site-shell">
+      <header class="site-header scrolled" id="top">
+        <a class="brand" href="./index.html" aria-label="Prototype 0, accueil"><span class="brand-mark">P<span>0</span><i></i></span><span class="brand-name">PROTOTYPE <b>0</b></span></a>
+        <button class="menu-toggle" type="button" aria-label="Ouvrir le menu" aria-controls="main-nav" aria-expanded="false"><span></span><span></span></button>
+        <nav class="main-nav" id="main-nav" aria-label="Navigation principale">
+          <a href="./index.html">La vitrine</a>
+          <a href="#historique" aria-current="page">Pushes du jeu</a>
+          <a href="./choix.html">Faire les choix</a>
+          <a class="nav-github" href="https://github.com/aKoMoses/PROTOTYPE-V0.1" target="_blank" rel="noopener noreferrer">Voir le GitHub <span aria-hidden="true">↗</span></a>
+        </nav>
+      </header>
+      <main id="main">
+        <section class="patchs-hero">
+          <div class="wrap patchs-hero-layout">
+            <div>
+              <p class="section-index"><span>JOURNAL DU JEU</span> / PROTOTYPE 0</p>
+              <h1>À RÉCUPÉRER<br><em>DANS LE JEU.</em></h1>
+              <p class="patchs-hero-copy">Les derniers pushes publiés dans le dépôt du jeu, avec le détail de ce que ton prochain pull va récupérer.</p>
+              <a class="button button-primary" href="#historique">VOIR LES PUSHES <span aria-hidden="true">↘</span></a>
+            </div>
+            <div class="patchs-hero-visual"><img src="./assets/duel.png" width="1280" height="720" alt="Deux robots dans l’arène de Prototype 0"><span>JOURNAL DE DÉVELOPPEMENT / JEU</span></div>
+          </div>
+        </section>
+        <section class="patchs-history section-pad" id="historique" aria-labelledby="patchs-title">
+          <div class="wrap">
+            <div class="patchs-heading"><div><p class="section-index"><span>01</span> / COMMITS PUBLIÉS</p><h2 id="patchs-title">LES PUSHES<br><em>EN ATTENTE.</em></h2></div><p>Les commits à récupérer sont affichés du plus récent au plus ancien. Chaque fiche montre ce que ce push ajoute au jeu.</p></div>
+            <p class="patchs-status" id="patchs-status" role="status" aria-live="polite">Chargement des pushes…</p>
+            <div id="patchs-list" class="patchs-list"></div>
+          </div>
+        </section>
+      </main>
+      <footer class="site-footer"><div class="wrap footer-top"><a class="brand" href="./index.html" aria-label="Retour à la vitrine"><span class="brand-mark">P<span>0</span><i></i></span><span class="brand-name">PROTOTYPE <b>0</b></span></a><a href="./index.html">RETOUR À LA VITRINE ↗</a></div><div class="wrap footer-bottom"><span>UN PROJET DE DEUX FRÈRES.</span><span>PROTOTYPE 0 © 2026</span><a href="#top">RETOUR EN HAUT ↑</a></div></footer>
+    </div>
+  </body>
+</html>
