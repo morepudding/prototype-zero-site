@@ -2,6 +2,7 @@ const { Redis } = require('@upstash/redis');
 
 const IDS_KEY = 'prototype0:blaster:choice-ids';
 const CHOICE_KEY = 'prototype0:blaster:choice:';
+const VOTE_EVENTS_KEY = 'prototype0:discord:vote-events';
 const VALID_STYLES = new Set(['01', '02', '03', '04', '05']);
 const VALID_SOUNDS = new Set(['impulsion', 'plasma', 'charge']);
 const EQUIPMENT = new Set(['shotgun', 'modulo_drone', 'javelin', 'magnetic_field', 'static_shield', 'pyro_boots', 'bio_injector', 'baroud', 'omnivamp']);
@@ -57,12 +58,21 @@ module.exports = async function handler(request, response) {
         return response.status(400).json({ error: 'Choix invalide.' });
       }
 
+      const field = kind === 'icon' ? `icon:${item}` : kind;
+      const previous = await redis.hget(CHOICE_KEY + id, field);
       await redis.hset(CHOICE_KEY + id, {
         name,
-        [kind === 'icon' ? `icon:${item}` : kind]: value,
+        [field]: value,
         updatedAt: new Date().toISOString()
       });
       await redis.sadd(IDS_KEY, id);
+      if (previous !== value && process.env.DISCORD_WEBHOOK_URL) {
+        try {
+          await redis.rpush(VOTE_EVENTS_KEY, JSON.stringify({ id, name, kind, item: kind === 'icon' ? item : null, changed: previous !== null }));
+        } catch (error) {
+          console.error('Vote notification queue failed:', error);
+        }
+      }
     }
 
     return response.status(200).json({ choices: await listChoices(redis) });

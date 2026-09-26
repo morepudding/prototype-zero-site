@@ -1,0 +1,35 @@
+name: Discord notifications
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: '7,37 * * * *'
+  workflow_dispatch:
+
+jobs:
+  assets:
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Announce voting assets
+        run: node scripts/notify-assets.cjs
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+
+  votes:
+    if: github.event_name != 'push'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send grouped votes
+        env:
+          NOTIFICATION_CRON_SECRET: ${{ secrets.NOTIFICATION_CRON_SECRET }}
+        run: |
+          if [ -z "$NOTIFICATION_CRON_SECRET" ]; then
+            echo "NOTIFICATION_CRON_SECRET is not configured" >&2
+            exit 1
+          fi
+          curl --fail-with-body --silent --show-error --request POST \
+            --header "Authorization: Bearer $NOTIFICATION_CRON_SECRET" \
+            https://prototype-zero-site.vercel.app/api/notify-votes
