@@ -92,7 +92,12 @@
 .patchs-heading h2{margin-top:26px}
 .patchs-heading>p{max-width:380px;color:#c5b9ae;font-size:17px;line-height:1.7;padding-bottom:5px}
 .patchs-status{margin-top:45px;color:var(--muted);font-size:16px}
-.patchs-list{display:grid;gap:34px;margin-top:65px}
+.pull-identity{display:flex;align-items:center;gap:16px 22px;flex-wrap:wrap;margin-top:52px;padding:20px 24px;background:#28211d;border:1px solid var(--line)}
+.pull-identity label{color:var(--orange-light);font:800 12px/1 var(--body);letter-spacing:.12em}
+.pull-identity select{min-height:44px;padding:0 12px;background:#171310;border:1px solid rgba(242,234,219,.4);color:var(--cream);font:600 15px/1 var(--body)}
+.pull-identity p{flex:1;min-width:260px;color:#c5b9ae;font-size:14px;line-height:1.5}
+.pull-identity code,.patchs-heading code{color:var(--cyan)}
+.patchs-list{display:grid;gap:34px;margin-top:34px}
 .patch-card{display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);background:#211a16;border:1px solid var(--line);min-width:0}
 .patch-card-visual{min-height:460px;position:relative;overflow:hidden;background:#0e0c0b}
 .patch-card-visual:after{content:'';position:absolute;inset:0;background:linear-gradient(0deg,rgba(18,16,14,.5),transparent 55%);pointer-events:none}
@@ -113,6 +118,17 @@
 .patch-changes li:before{content:'↗';position:absolute;left:0;top:14px;color:var(--orange);font-weight:800}
 .patch-next{background:rgba(121,237,240,.07);border-left:2px solid var(--cyan);padding:16px 18px;margin-top:27px;color:#d7e3e0;font-size:14px;line-height:1.65}
 .patch-next strong{color:var(--cyan);font-size:11px;letter-spacing:.1em}
+.pull-panel{margin-top:27px;padding:18px 20px;background:rgba(251,91,43,.07);border-left:2px solid var(--orange)}
+.pull-panel.pull-confirmed{background:rgba(121,237,240,.07);border-color:var(--cyan)}
+.pull-panel>strong{color:var(--orange-light);font:800 11px/1 var(--body);letter-spacing:.12em}
+.pull-panel.pull-confirmed>strong{color:var(--cyan)}
+.pull-message{color:#e3d6c9;font-size:14px;line-height:1.55;margin-top:11px}
+.pull-button{display:inline-flex;align-items:center;justify-content:center;min-height:43px;margin-top:16px;padding:0 16px;background:var(--orange);border:0;color:var(--ink);cursor:pointer;font:800 12px/1 var(--body);letter-spacing:.05em}
+.pull-button:hover{background:var(--orange-light)}
+.pull-button:disabled{opacity:.65;cursor:wait}
+.pull-button[hidden]{display:none}
+.pull-feedback{color:var(--orange-light);font-size:13px;margin-top:10px}
+.pull-feedback:empty{display:none}
 .patch-sound{display:grid;gap:12px;margin-top:27px;padding:16px 18px;background:rgba(121,237,240,.07);border-left:2px solid var(--cyan)}
 .patch-sound strong{color:var(--cyan);font:800 11px/1 var(--body);letter-spacing:.1em}
 .patch-sound audio{width:100%;height:40px}
@@ -120,7 +136,7 @@
 .patch-source:hover{color:var(--cream)}
 @media(min-width:761px) and (max-width:1300px){.main-nav{gap:clamp(12px,1.8vw,24px)}.main-nav>a{font-size:12px}.main-nav .nav-github{gap:8px;padding:0 14px}}
 @media(max-width:1000px){.patchs-hero-layout{grid-template-columns:1fr}.patchs-hero-visual{min-height:340px;max-height:550px}.patchs-hero-visual img{aspect-ratio:16/9}.patch-card{grid-template-columns:1fr}.patch-card-visual{min-height:0;max-height:500px;aspect-ratio:16/9}.patchs-heading{display:block}.patchs-heading>p{margin-top:25px}}
-@media(max-width:760px){.patchs-hero{padding:130px 0 75px}.patchs-hero h1{font-size:clamp(68px,12vw,100px)}.patchs-hero-visual{min-height:0}.patchs-list{margin-top:45px}.patch-card-body{padding:26px}.patch-card h3{font-size:clamp(51px,10vw,74px)}.patch-summary{font-size:16px}}
+@media(max-width:760px){.patchs-hero{padding:130px 0 75px}.patchs-hero h1{font-size:clamp(68px,12vw,100px)}.patchs-hero-visual{min-height:0}.patchs-list{margin-top:30px}.patch-card-body{padding:26px}.patch-card h3{font-size:clamp(51px,10vw,74px)}.patch-summary{font-size:16px}}
 @media(max-width:480px){.patchs-hero h1{font-size:clamp(60px,14.5vw,76px)}.patchs-hero-visual span{left:17px;bottom:17px;font-size:9px}.patchs-heading h2{font-size:clamp(60px,14vw,76px)}.patch-card-visual-label{font-size:10px;left:15px;bottom:15px}.patch-card h3{font-size:51px}.patch-card-meta{gap:12px;font-size:10px}.patch-changes li{font-size:14px}}
 .choices-page .site-header{background:rgba(18,16,14,.96)}
 .choices-hero{padding-top:clamp(150px,16vw,240px);padding-bottom:95px;background:radial-gradient(circle at 80% 30%,rgba(251,91,43,.18),transparent 38%),repeating-linear-gradient(-60deg,transparent 0 90px,rgba(255,255,255,.017) 91px 92px),#211a16;border-bottom:1px solid var(--line)}

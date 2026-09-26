@@ -31,8 +31,8 @@
           <div class="wrap patchs-hero-layout">
             <div>
               <p class="section-index"><span>JOURNAL DU JEU</span> / PROTOTYPE 0</p>
-              <h1>À RÉCUPÉRER<br><em>DANS LE JEU.</em></h1>
-              <p class="patchs-hero-copy">Les derniers pushes publiés dans le dépôt du jeu, avec le détail de ce que ton prochain pull va récupérer.</p>
+              <h1>LES PUSHES<br><em>DU JEU.</em></h1>
+              <p class="patchs-hero-copy">Ce que chacun a ajouté au jeu, et la date à laquelle l’autre a confirmé l’avoir récupéré.</p>
               <a class="button button-primary" href="#historique">VOIR LES PUSHES <span aria-hidden="true">↘</span></a>
             </div>
             <div class="patchs-hero-visual"><img src="./assets/duel.png" width="1280" height="720" alt="Deux robots dans l’arène de Prototype 0"><span>JOURNAL DE DÉVELOPPEMENT / JEU</span></div>
@@ -40,7 +40,8 @@
         </section>
         <section class="patchs-history section-pad" id="historique" aria-labelledby="patchs-title">
           <div class="wrap">
-            <div class="patchs-heading"><div><p class="section-index"><span>01</span> / COMMITS PUBLIÉS</p><h2 id="patchs-title">LES PUSHES<br><em>EN ATTENTE.</em></h2></div><p>Les commits à récupérer sont affichés du plus récent au plus ancien. Chaque fiche montre ce que ce push ajoute au jeu.</p></div>
+            <div class="patchs-heading"><div><p class="section-index"><span>01</span> / COMMITS PUBLIÉS</p><h2 id="patchs-title">QUI A FAIT<br><em>QUOI&nbsp;?</em></h2></div><p>Les commits sont affichés du plus récent au plus ancien. Après ton <code>git pull</code>, choisis ton nom pour confirmer la récupération.</p></div>
+            <div class="pull-identity"><label for="pull-reader">JE SUIS</label><select id="pull-reader"><option value="">Choisir mon nom</option><option value="BotteroRomain">BotteroRomain</option><option value="aKoMoses">aKoMoses</option></select><p>Après ton <code>git pull</code>, confirme sur la fiche du push de l’autre. La date affichée est celle de ta confirmation sur le site.</p></div>
             <p class="patchs-status" id="patchs-status" role="status" aria-live="polite">Chargement des pushes…</p>
             <div id="patchs-list" class="patchs-list"></div>
           </div>

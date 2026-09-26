@@ -4,7 +4,6 @@
       "commit": "46fca8d99b1011aa6e62114d0a4b49fb67013c6e",
       "author": "BotteroRomain",
       "date": "2026-09-26",
-      "status": "a_recuperer",
       "title": "Le Blaster a son icône et son son",
       "summary": "Le dessin « Gravure » choisi pour le Blaster arrive dans le jeu, accompagné du son de tir « Plasma ».",
       "changes": [
@@ -22,7 +21,6 @@
       "commit": "b354eb99f90dde9de94b30510cfdb3a42451ecc9",
       "author": "aKoMoses",
       "date": "2026-09-26",
-      "status": "a_recuperer",
       "title": "La boucle de match V0.2",
       "summary": "Le duel local devient un match complet : décompte, manches, score et victoire au premier à trois points.",
       "changes": [
