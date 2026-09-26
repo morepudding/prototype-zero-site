@@ -179,8 +179,9 @@
                 </label>
               </fieldset>
               <div class="icon-vote-action">
-                <p>Ton choix reste sur cet appareil. Pour nous le transmettre, partage ta validation.</p>
-                <button class="button button-primary" type="submit">VALIDER ET PARTAGER <span aria-hidden="true">↗</span></button>
+                <label class="vote-name-label" for="icon-voter-name">TON PRÉNOM <input class="vote-name-input" id="icon-voter-name" name="voter-name" maxlength="24" autocomplete="given-name" required placeholder="Ton prénom"></label>
+                <p>Enregistre ton choix pour qu’il apparaisse sur le site.</p>
+                <button class="button button-primary" type="submit">ENREGISTRER MON CHOIX <span aria-hidden="true">↗</span></button>
                 <p class="icon-vote-status" id="icon-vote-status" role="status" aria-live="polite"></p>
               </div>
             </form>
@@ -194,7 +195,7 @@
                 <p class="section-index"><span>05</span> / IDENTITÉ SONORE</p>
                 <h2 id="sound-vote-title">QUEL SON<br><em>POUR LE BLASTER&nbsp;?</em></h2>
               </div>
-              <p>Écoute ces trois tirs créés pour l’arme Blaster de Prototype 0. Choisis celui qui te plaît le plus, puis partage ton choix avec nous.</p>
+              <p>Écoute ces trois tirs créés pour l’arme Blaster de Prototype 0. Choisis celui qui te plaît le plus et enregistre ton choix sur le site.</p>
             </div>
             <form class="sound-vote" id="sound-vote-form">
               <fieldset class="sound-vote-grid">
@@ -216,11 +217,17 @@
                 </article>
               </fieldset>
               <div class="sound-vote-action">
-                <p>Ton choix reste sur cet appareil. Pour nous le transmettre, partage ta validation.</p>
-                <button class="button button-primary" type="submit">VALIDER ET PARTAGER <span aria-hidden="true">↗</span></button>
+                <label class="vote-name-label" for="sound-voter-name">TON PRÉNOM <input class="vote-name-input" id="sound-voter-name" name="voter-name" maxlength="24" autocomplete="given-name" required placeholder="Ton prénom"></label>
+                <p>Enregistre ton choix pour qu’il apparaisse sur le site.</p>
+                <button class="button button-primary" type="submit">ENREGISTRER MON CHOIX <span aria-hidden="true">↗</span></button>
                 <p class="sound-vote-status" id="sound-vote-status" role="status" aria-live="polite"></p>
               </div>
             </form>
+            <div class="choice-results reveal" aria-labelledby="choice-results-title">
+              <div class="choice-results-head"><h3 id="choice-results-title">CHOIX ENREGISTRÉS</h3><button id="refresh-choices" type="button">ACTUALISER ↻</button></div>
+              <p id="choice-results-status" role="status" aria-live="polite">Chargement des choix…</p>
+              <div id="choice-results-list" class="choice-results-list"></div>
+            </div>
           </div>
         </section>
 

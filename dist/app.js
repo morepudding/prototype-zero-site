@@ -31,51 +31,6 @@ const iconStyleNames = {
   '04': 'Gravure',
   '05': 'Pixel art'
 };
-const iconChoiceInputs = [...iconVoteForm.querySelectorAll('input[name="blaster-style"]')];
-const requestedStyle = new URL(window.location.href).searchParams.get('style');
-let savedStyle = null;
-try { savedStyle = window.localStorage.getItem('prototype0-blaster-style'); } catch (_) { /* Storage may be unavailable. */ }
-const initialStyle = iconStyleNames[requestedStyle] ? requestedStyle : savedStyle;
-const initialInput = iconChoiceInputs.find(input => input.value === initialStyle);
-if (initialInput) initialInput.checked = true;
-
-iconVoteForm.addEventListener('change', event => {
-  if (event.target.name !== 'blaster-style') return;
-  try { window.localStorage.setItem('prototype0-blaster-style', event.target.value); } catch (_) { /* Choice remains visible. */ }
-  iconVoteStatus.textContent = `${iconStyleNames[event.target.value]} sélectionné. Valide et partage ton choix pour nous le transmettre.`;
-});
-
-iconVoteForm.addEventListener('submit', async event => {
-  event.preventDefault();
-  const selected = iconVoteForm.querySelector('input[name="blaster-style"]:checked');
-  if (!selected) { iconVoteForm.reportValidity(); return; }
-  const choice = `${selected.value} — ${iconStyleNames[selected.value]}`;
-  const url = new URL(window.location.href);
-  url.searchParams.set('style', selected.value);
-  url.hash = 'styles-blaster';
-  const message = `Je valide le style ${choice} pour les icônes de Prototype 0. ${url.href}`;
-  try { window.localStorage.setItem('prototype0-blaster-style', selected.value); } catch (_) { /* Sharing still works. */ }
-
-  if (navigator.share) {
-    try {
-      await navigator.share({title:'Icône du blaster — Prototype 0', text:`Je valide le style ${choice} pour les icônes de Prototype 0.`, url:url.href});
-      iconVoteStatus.textContent = `Style ${choice} partagé. Merci !`;
-      return;
-    } catch (error) {
-      if (error.name === 'AbortError') {
-        iconVoteStatus.textContent = 'Partage annulé. Ton choix reste sélectionné sur cet appareil.';
-        return;
-      }
-    }
-  }
-  try {
-    await navigator.clipboard.writeText(message);
-    iconVoteStatus.textContent = `Validation copiée : ${choice}. Colle le message dans votre conversation pour nous l’envoyer.`;
-  } catch (_) {
-    iconVoteStatus.textContent = `Style ${choice} sélectionné. Copie ce lien pour nous l’envoyer : ${url.href}`;
-  }
-});
-
 const soundVoteForm = document.getElementById('sound-vote-form');
 const soundVoteStatus = document.getElementById('sound-vote-status');
 const soundNames = {
@@ -83,57 +38,123 @@ const soundNames = {
   plasma: 'Plasma',
   charge: 'Charge'
 };
-const soundChoiceInputs = [...soundVoteForm.querySelectorAll('input[name="blaster-sound"]')];
-const requestedSound = new URL(window.location.href).searchParams.get('son');
-let savedSound = null;
-try { savedSound = window.localStorage.getItem('prototype0-blaster-sound'); } catch (_) { /* Storage may be unavailable. */ }
-const initialSound = soundNames[requestedSound] ? requestedSound : savedSound;
-const initialSoundInput = soundChoiceInputs.find(input => input.value === initialSound);
-if (initialSoundInput) {
-  initialSoundInput.checked = true;
-  soundVoteStatus.textContent = `${soundNames[initialSound]} sélectionné.`;
+const resultsStatus = document.getElementById('choice-results-status');
+const resultsList = document.getElementById('choice-results-list');
+const nameInputs = [...document.querySelectorAll('.vote-name-input')];
+let voterId = null;
+let voterName = '';
+try {
+  voterId = window.localStorage.getItem('prototype0-voter-id');
+  if (!voterId) {
+    voterId = crypto.randomUUID();
+    window.localStorage.setItem('prototype0-voter-id', voterId);
+  }
+  voterName = window.localStorage.getItem('prototype0-voter-name') || '';
+} catch (_) {
+  voterId = crypto.randomUUID();
 }
+nameInputs.forEach(input => {
+  input.value = voterName;
+  input.addEventListener('input', () => {
+    voterName = input.value;
+    nameInputs.forEach(other => { if (other !== input) other.value = voterName; });
+    try { window.localStorage.setItem('prototype0-voter-name', voterName); } catch (_) { /* Storage may be unavailable. */ }
+  });
+});
+
+function restoreChoice(form, fieldName, queryName, storageName, validNames) {
+  const requested = new URL(window.location.href).searchParams.get(queryName);
+  let saved = null;
+  try { saved = window.localStorage.getItem(storageName); } catch (_) { /* Storage may be unavailable. */ }
+  const value = validNames[requested] ? requested : saved;
+  const input = [...form.querySelectorAll(`input[name="${fieldName}"]`)].find(item => item.value === value);
+  if (input) input.checked = true;
+}
+restoreChoice(iconVoteForm, 'blaster-style', 'style', 'prototype0-blaster-style', iconStyleNames);
+restoreChoice(soundVoteForm, 'blaster-sound', 'son', 'prototype0-blaster-sound', soundNames);
+
+function renderChoices(choices) {
+  resultsList.replaceChildren();
+  resultsStatus.textContent = choices.length ? `${choices.length} choix enregistré${choices.length > 1 ? 's' : ''}.` : 'Aucun choix enregistré pour le moment.';
+  choices.forEach(choice => {
+    const row = document.createElement('div');
+    row.className = 'choice-result';
+    const name = document.createElement('strong');
+    name.textContent = choice.name;
+    row.append(name);
+    for (const [label, value] of [
+      ['ICÔNE', iconStyleNames[choice.style] || 'À choisir'],
+      ['SON', soundNames[choice.sound] || 'À choisir']
+    ]) {
+      const cell = document.createElement('span');
+      const title = document.createElement('b');
+      title.textContent = label;
+      cell.append(title, document.createTextNode(value));
+      row.append(cell);
+    }
+    resultsList.append(row);
+  });
+}
+
+async function refreshChoices() {
+  resultsStatus.textContent = 'Chargement des choix…';
+  try {
+    const response = await fetch('/api/choices', { cache: 'no-store' });
+    if (!response.ok) throw new Error('Database unavailable');
+    const data = await response.json();
+    renderChoices(data.choices);
+  } catch (_) {
+    resultsStatus.textContent = 'Les choix enregistrés sont momentanément indisponibles.';
+  }
+}
+
+async function saveChoice(form, kind, fieldName, storageName, names, status) {
+  const selected = form.querySelector(`input[name="${fieldName}"]:checked`);
+  const nameInput = form.querySelector('.vote-name-input');
+  const name = nameInput.value.trim();
+  nameInput.setCustomValidity(name ? '' : 'Saisis un prénom.');
+  if (!selected || !form.reportValidity()) return;
+  const button = form.querySelector('button[type="submit"]');
+  button.disabled = true;
+  status.textContent = 'Enregistrement en cours…';
+  try {
+    const response = await fetch('/api/choices', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id: voterId, name, kind, value: selected.value })
+    });
+    if (!response.ok) throw new Error('Save failed');
+    const data = await response.json();
+    try { window.localStorage.setItem(storageName, selected.value); } catch (_) { /* Server save succeeded. */ }
+    status.textContent = `${names[selected.value]} enregistré pour ${name}. Ton choix apparaît ci-dessous.`;
+    renderChoices(data.choices);
+  } catch (_) {
+    status.textContent = 'Enregistrement impossible pour le moment. Réessaie plus tard.';
+  } finally {
+    button.disabled = false;
+  }
+}
+
+iconVoteForm.addEventListener('change', event => {
+  if (event.target.name === 'blaster-style') iconVoteStatus.textContent = `${iconStyleNames[event.target.value]} sélectionné. Enregistre ton choix pour le sauvegarder.`;
+});
+iconVoteForm.addEventListener('submit', event => {
+  event.preventDefault();
+  saveChoice(iconVoteForm, 'style', 'blaster-style', 'prototype0-blaster-style', iconStyleNames, iconVoteStatus);
+});
 
 soundVoteForm.querySelectorAll('audio').forEach(audio => audio.addEventListener('play', () => {
   soundVoteForm.querySelectorAll('audio').forEach(other => { if (other !== audio) other.pause(); });
 }));
-
 soundVoteForm.addEventListener('change', event => {
-  if (event.target.name !== 'blaster-sound') return;
-  try { window.localStorage.setItem('prototype0-blaster-sound', event.target.value); } catch (_) { /* Choice remains visible. */ }
-  soundVoteStatus.textContent = `${soundNames[event.target.value]} sélectionné. Valide et partage ton choix pour nous le transmettre.`;
+  if (event.target.name === 'blaster-sound') soundVoteStatus.textContent = `${soundNames[event.target.value]} sélectionné. Enregistre ton choix pour le sauvegarder.`;
 });
-
-soundVoteForm.addEventListener('submit', async event => {
+soundVoteForm.addEventListener('submit', event => {
   event.preventDefault();
-  const selected = soundVoteForm.querySelector('input[name="blaster-sound"]:checked');
-  if (!selected) { soundVoteForm.reportValidity(); return; }
-  const choice = soundNames[selected.value];
-  const url = new URL(window.location.href);
-  url.searchParams.set('son', selected.value);
-  url.hash = 'sons-blaster';
-  const message = `Je choisis le son ${choice} pour le Blaster de Prototype 0. ${url.href}`;
-  try { window.localStorage.setItem('prototype0-blaster-sound', selected.value); } catch (_) { /* Sharing still works. */ }
-
-  if (navigator.share) {
-    try {
-      await navigator.share({title:'Son du Blaster — Prototype 0', text:`Je choisis le son ${choice} pour le Blaster de Prototype 0.`, url:url.href});
-      soundVoteStatus.textContent = `Son ${choice} partagé. Merci !`;
-      return;
-    } catch (error) {
-      if (error.name === 'AbortError') {
-        soundVoteStatus.textContent = 'Partage annulé. Ton choix reste sélectionné sur cet appareil.';
-        return;
-      }
-    }
-  }
-  try {
-    await navigator.clipboard.writeText(message);
-    soundVoteStatus.textContent = `Choix copié : ${choice}. Colle le message dans votre conversation pour nous l’envoyer.`;
-  } catch (_) {
-    soundVoteStatus.textContent = `Son ${choice} sélectionné. Copie ce lien pour nous l’envoyer : ${url.href}`;
-  }
+  saveChoice(soundVoteForm, 'sound', 'blaster-sound', 'prototype0-blaster-sound', soundNames, soundVoteStatus);
 });
+document.getElementById('refresh-choices').addEventListener('click', refreshChoices);
+refreshChoices();
 
 const menuToggle = document.querySelector('.menu-toggle');
 const nav = document.querySelector('.main-nav');

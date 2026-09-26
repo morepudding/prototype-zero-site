@@ -1,4 +1,6 @@
 .vercel/
+node_modules/
+.env.local
 .sites-runtime/
 .sites-checkout/
 *.tar.gz
