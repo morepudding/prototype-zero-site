@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#12100e">
+    <meta name="description" content="Compare deux propositions d'icônes gravées pour chaque arme et gadget de Prototype 0.">
+    <title>Choix des icônes — Prototype 0</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800;900&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./styles.css">
+    <script defer src="./choix.js"></script>
+  </head>
+  <body class="choices-page">
+    <a class="skip-link" href="#main">Aller au contenu</a>
+    <div class="site-shell">
+      <header class="site-header scrolled" id="top">
+        <a class="brand" href="./index.html" aria-label="Prototype 0, accueil">
+          <span class="brand-mark">P<span>0</span><i></i></span>
+          <span class="brand-name">PROTOTYPE <b>0</b></span>
+        </a>
+        <button class="menu-toggle" type="button" aria-label="Ouvrir le menu" aria-controls="main-nav" aria-expanded="false"><span></span><span></span></button>
+        <nav class="main-nav" id="main-nav" aria-label="Navigation principale">
+          <a href="./index.html">La vitrine</a>
+          <a href="#icones">Les icônes</a>
+          <a href="#sons-blaster">Le son du blaster</a>
+          <a class="nav-github" href="https://github.com/aKoMoses/PROTOTYPE-V0.1" target="_blank" rel="noopener noreferrer">Voir le GitHub <span aria-hidden="true">↗</span></a>
+        </nav>
+      </header>
+
+      <main id="main">
+        <section class="choices-hero section-pad">
+          <div class="wrap">
+            <p class="section-index"><span>ATELIER</span> / DIRECTION ARTISTIQUE</p>
+            <h1>CHOISIS LES<br><em>ICÔNES DU JEU.</em></h1>
+            <p>Le style gravé du blaster est retenu. Pour chaque autre arme et gadget, compare deux dessins dans cette même direction et sélectionne celui que tu préfères.</p>
+            <div class="choices-hero-facts"><span>01 STYLE VALIDÉ</span><span>09 ÉLÉMENTS À CHOISIR</span><span>02 PROPOSITIONS CHACUN</span></div>
+          </div>
+        </section>
+
+        <section class="choice-workshop section-pad" id="icones" aria-labelledby="choice-title">
+          <div class="wrap">
+            <div class="choice-reference">
+              <div class="choice-reference-art"><img src="./assets/equipment-icons/blaster-gravure.png" width="1240" height="1240" alt="Icône de blaster en gravure, style retenu"></div>
+              <div><p class="section-index"><span>RÉFÉRENCE</span> / STYLE 04</p><h2 id="choice-title">LE BLASTER<br><em>DONNE LE TON.</em></h2><p>Contours noirs marqués, crème patiné, graphite hachuré et touches cyan et ambre. Ce blaster est la référence validée pour le reste de l’arsenal.</p><span class="choice-locked">STYLE RETENU ✓</span></div>
+            </div>
+            <div class="choice-intro">
+              <div><p class="section-index"><span>01—09</span> / PROPOSITIONS</p><h2>À TOI DE<br><em>TRANCHER.</em></h2></div>
+              <p>Saisis ton prénom, puis choisis A ou B pour chaque élément. Tu peux enregistrer tes choix un par un et revenir les modifier.</p>
+            </div>
+            <label class="vote-name-label choice-name" for="voter-name">TON PRÉNOM
+              <input class="vote-name-input" id="voter-name" name="voter-name" maxlength="24" autocomplete="given-name" required placeholder="Ton prénom">
+            </label>
+            <div id="equipment-list" class="equipment-list"></div>
+          </div>
+        </section>
+
+        <section class="sound-vote-section section-pad" id="sons-blaster" aria-labelledby="sound-vote-title">
+          <div class="wrap">
+            <div class="sound-vote-heading">
+              <div><p class="section-index"><span>SON</span> / BLASTER</p><h2 id="sound-vote-title">ET LE SON<br><em>DU BLASTER&nbsp;?</em></h2></div>
+              <p>Écoute les trois propositions de tir et enregistre celle que tu préfères.</p>
+            </div>
+            <form class="sound-vote" id="sound-vote-form">
+              <fieldset class="sound-vote-grid">
+                <legend class="sr-only">Choisis un son pour le blaster</legend>
+                <article class="sound-option"><input type="radio" id="sound-impulsion" name="blaster-sound" value="impulsion" required><label for="sound-impulsion"><span class="sound-option-number">01 / TIR</span><strong>IMPULSION</strong><span class="sound-option-description">Un zap électrique bref et aigu.</span><span class="sound-option-choose">CHOISIR CE SON ↗</span></label><audio controls preload="none" src="./assets/audio/blaster_impulsion.mp3" aria-label="Écouter le son Impulsion du blaster">Votre navigateur ne prend pas en charge l’audio.</audio></article>
+                <article class="sound-option"><input type="radio" id="sound-plasma" name="blaster-sound" value="plasma"><label for="sound-plasma"><span class="sound-option-number">02 / TIR</span><strong>PLASMA</strong><span class="sound-option-description">Un claquement métallique avec une traîne d’énergie.</span><span class="sound-option-choose">CHOISIR CE SON ↗</span></label><audio controls preload="none" src="./assets/audio/blaster_plasma.mp3" aria-label="Écouter le son Plasma du blaster">Votre navigateur ne prend pas en charge l’audio.</audio></article>
+                <article class="sound-option"><input type="radio" id="sound-charge" name="blaster-sound" value="charge"><label for="sound-charge"><span class="sound-option-number">03 / TIR</span><strong>CHARGE</strong><span class="sound-option-description">Une décharge plus grave et puissante.</span><span class="sound-option-choose">CHOISIR CE SON ↗</span></label><audio controls preload="none" src="./assets/audio/blaster_charge.mp3" aria-label="Écouter le son Charge du blaster">Votre navigateur ne prend pas en charge l’audio.</audio></article>
+              </fieldset>
+              <div class="sound-vote-action"><button class="button button-primary" type="submit">ENREGISTRER CE SON <span aria-hidden="true">↗</span></button><p class="sound-vote-status" id="sound-vote-status" role="status" aria-live="polite"></p></div>
+            </form>
+            <div class="choice-results" aria-labelledby="choice-results-title"><div class="choice-results-head"><h3 id="choice-results-title">CHOIX ENREGISTRÉS</h3><button id="refresh-choices" type="button">ACTUALISER ↻</button></div><p id="choice-results-status" role="status" aria-live="polite">Chargement des choix…</p><div id="choice-results-list" class="choice-results-list"></div></div>
+          </div>
+        </section>
+      </main>
+      <footer class="site-footer"><div class="wrap footer-top"><a class="brand" href="./index.html" aria-label="Retour à la vitrine"><span class="brand-mark">P<span>0</span><i></i></span><span class="brand-name">PROTOTYPE <b>0</b></span></a><a href="./index.html">RETOUR À LA VITRINE ↗</a></div><div class="wrap footer-bottom"><span>UN PROJET DE DEUX FRÈRES.</span><span>PROTOTYPE 0 © 2026</span><a href="#top">RETOUR EN HAUT ↑</a></div></footer>
+    </div>
+  </body>
+</html>
