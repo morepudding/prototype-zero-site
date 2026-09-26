@@ -1,4 +1,5 @@
 const fs = require('node:fs');
+const { execFileSync } = require('node:child_process');
 
 const webhook = process.env.DISCORD_WEBHOOK_URL;
 if (!webhook) {
@@ -8,6 +9,10 @@ if (!webhook) {
 
 const event = JSON.parse(fs.readFileSync(process.env.GITHUB_EVENT_PATH, 'utf8'));
 const changed = new Set((event.commits || []).flatMap(commit => [...(commit.added || []), ...(commit.modified || [])]));
+try {
+  const diff = execFileSync('git', ['diff', '--name-only', '--diff-filter=AM', event.before, event.after], { encoding: 'utf8' });
+  diff.trim().split(/\r?\n/).filter(Boolean).forEach(path => changed.add(path));
+} catch (_) { /* Commit metadata remains usable if this diff is unavailable. */ }
 const votingFiles = [...changed].filter(path =>
   /^dist\/assets\/equipment-icons\/.+-(a|b)\.png$/i.test(path) ||
   /^dist\/assets\/audio\/.+\.mp3$/i.test(path)
