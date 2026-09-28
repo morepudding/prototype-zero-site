@@ -15,7 +15,11 @@ const gameSfx = [
   {id:'pyro-dash', name:'PYRO BOOTS', action:'DASH', variants:['Propulsion','Glissement métallique']},
   {id:'javelin-teleport', name:'JAVELIN', action:'TÉLÉPORTATION', variants:['Claquement spatial','Aspiration et arrivée']},
   {id:'magnetic-absorb', name:'MAGNETIC FIELD', action:'PROJECTILE ABSORBÉ', variants:['Choc grave','Impact plus clair']},
-  {id:'robot-destruction', name:'DESTRUCTION D’UN ROBOT', action:'DESTRUCTION', variants:['Rupture du blindage','Panne du noyau']}
+  {id:'robot-destruction', name:'DESTRUCTION D’UN ROBOT', action:'DESTRUCTION', variants:['Rupture du blindage','Panne du noyau']},
+  {id:'impact-robot', name:'IMPACT SUR ROBOT', action:'BLINDAGE TOUCHÉ', variants:['Claquement métallique sec','Choc sourd et touche électrique']},
+  {id:'impact-decor', name:'IMPACT SUR DÉCOR', action:'OBSTACLE TOUCHÉ', variants:['Impact sur acier','Impact sur béton']},
+  {id:'impact-critique', name:'COUP CRITIQUE', action:'IMPACT RENFORCÉ', variants:['Craquement du blindage','Choc grave et rupture électrique']},
+  {id:'degats-recus', name:'DÉGÂTS REÇUS', action:'LE JOUEUR EST TOUCHÉ', variants:['Coup sec sur le châssis','Choc sourd et baisse d’énergie']}
 ];
 const equipmentList = document.getElementById('equipment-list');
 const gameSfxList = document.getElementById('game-sfx-list');
@@ -80,9 +84,10 @@ if (soundNames[storedSound]) soundForm.querySelector(`input[value="${storedSound
 for (const [index, item] of gameSfx.entries()) {
   const section = document.createElement('section');
   section.className = 'game-sfx-choice';
+  section.id = item.id;
   section.innerHTML = `
     <div class="game-sfx-choice-head">
-      <p class="section-index"><span>${String(index + 1).padStart(2,'0')} / 05</span> · ${item.action}</p>
+      <p class="section-index"><span>${String(index + 1).padStart(2,'0')} / ${String(gameSfx.length).padStart(2,'0')}</span> · ${item.action}</p>
       <h3>${item.name}</h3>
     </div>
     <form class="game-sfx-vote" data-item="${item.id}">

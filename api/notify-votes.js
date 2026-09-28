@@ -15,7 +15,11 @@ const GAME_SFX_LABELS = {
   'pyro-dash': 'dash des Pyro Boots',
   'javelin-teleport': 'téléportation du Javelin',
   'magnetic-absorb': 'absorption du Magnetic Field',
-  'robot-destruction': 'destruction d’un robot'
+  'robot-destruction': 'destruction d’un robot',
+  'impact-robot': 'impact sur robot',
+  'impact-decor': 'impact sur décor',
+  'impact-critique': 'coup critique',
+  'degats-recus': 'dégâts reçus'
 };
 
 function authorized(request) {

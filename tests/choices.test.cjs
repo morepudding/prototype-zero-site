@@ -43,6 +43,24 @@ test('saves independent A/B game sounds without changing existing votes', async 
   assert.equal(second.body.choices[0].gameSfx['drone-launch'], 'a');
   assert.equal(second.body.choices[0].gameSfx['pyro-dash'], 'b');
 
+  const impacts = ['impact-robot', 'impact-decor', 'impact-critique', 'degats-recus'];
+  for (const item of impacts) {
+    const saved = respond();
+    await handler(request({id, name: 'Ben', kind: 'game-sfx', item, value: 'a'}), saved);
+    assert.equal(saved.code, 200);
+    assert.equal(saved.body.choices[0].gameSfx[item], 'a');
+  }
+  const updated = respond();
+  await handler(request({id, name: 'Ben', kind: 'game-sfx', item: 'degats-recus', value: 'b'}), updated);
+  assert.equal(updated.code, 200);
+  for (const item of impacts) {
+    assert.equal(updated.body.choices[0].gameSfx[item], item === 'degats-recus' ? 'b' : 'a');
+  }
+  assert.equal(updated.body.choices[0].gameSfx['drone-launch'], 'a');
+  assert.equal(updated.body.choices[0].gameSfx['pyro-dash'], 'b');
+  assert.equal(updated.body.choices[0].sound, 'plasma');
+  assert.equal(updated.body.choices[0].icons.shotgun, 'a');
+
   const invalid = respond();
   await handler(request({id, name: 'Ben', kind: 'game-sfx', item: 'shotgun', value: 'a'}), invalid);
   assert.equal(invalid.code, 400);

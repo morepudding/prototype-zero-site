@@ -13,7 +13,7 @@ Site vitrine du jeu [Prototype 0](https://github.com/aKoMoses/PROTOTYPE-V0.1), c
 - `dist/styles.css` : identité visuelle et adaptation mobile.
 - `dist/app.js` : menu et présentation interactive de l’équipement.
 - `dist/assets/equipment-icons/` : blaster gravé retenu et deux propositions pour chacun des neuf autres éléments.
-- `dist/assets/audio/` : trois sons du blaster.
+- `dist/assets/audio/` : trois sons du blaster et les variantes A/B des neuf effets du jeu dans `game-sfx/`.
 - `api/choices.js` : enregistrement et lecture des choix dans Upstash Redis.
 
 La présentation reste statique. Une fonction Vercel stocke les choix dans une base Redis liée au projet.
@@ -25,6 +25,8 @@ Le workflow GitHub du dépôt du jeu publie automatiquement chaque push de `main
 La page `/choix.html` présente le blaster en gravure comme référence validée. Elle propose deux variantes dans ce style pour le shotgun, Modulo Drone, Javelin, Magnetic Field, Static Shield, Pyro Boots, Bio Injector, Baroud d’honneur et Omnivamp. Chaque choix peut être enregistré et modifié séparément. Elle regroupe aussi les trois sons du blaster. Les votes sont stockés dans Upstash Redis et la page affiche le décompte A/B par élément.
 
 L’API nécessite `KV_REST_API_URL` et `KV_REST_API_TOKEN`, fournis par l’intégration Upstash Redis de Vercel.
+
+Les impacts sur robot, les impacts sur décor, les coups critiques et les dégâts reçus ont chacun deux lecteurs A/B et un vote indépendant sur `/choix.html#impact-robot`. Les huit WAV sont des sons séparés ; aucun montage de comparaison n’est utilisé sur cette page.
 
 ## Voir le site en local
 
