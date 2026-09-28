@@ -179,7 +179,7 @@ gameSfxList.addEventListener('submit', event => {
 
 function renderChoices(choices) {
   resultsList.replaceChildren();
-  resultsStatus.textContent = choices.length ? `${choices.length} personne${choices.length > 1 ? 's' : ''} ont enregistré des choix.` : 'Aucun choix enregistré pour le moment.';
+  resultsStatus.textContent = choices.length ? `${choices.length} personne${choices.length > 1 ? 's ont' : ' a'} enregistré des choix.` : 'Aucun choix enregistré pour le moment.';
   for (const item of equipment) {
     const a = choices.filter(choice => choice.icons?.[item.id] === 'a').length;
     const b = choices.filter(choice => choice.icons?.[item.id] === 'b').length;
