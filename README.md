@@ -22,11 +22,13 @@ La présentation reste statique. Une fonction Vercel stocke les choix dans une b
 
 Le workflow GitHub du dépôt du jeu publie automatiquement chaque push de `main` dans `/api/game-pushes`. La page `/patchs.html` affiche ces fiches avant les fiches illustrées de `dist/data/patchs.json`. Pour enrichir une fiche avec une capture ou un son, ajouter manuellement une entrée dans ce fichier avec le même SHA ; les médias doivent être copiés dans `dist/assets/`. L’autre contributeur choisit son nom et confirme après son `git pull` ; `api/pulls.js` conserve la date de sa première confirmation pour chaque commit. Cette confirmation est déclarative : le site ne peut pas détecter directement une commande Git exécutée sur un autre ordinateur. L’API utilise les mêmes variables Upstash Redis que `/api/choices`.
 
-La page `/choix.html` présente le blaster en gravure comme référence validée. Elle propose deux variantes dans ce style pour le shotgun, Modulo Drone, Javelin, Magnetic Field, Static Shield, Pyro Boots, Bio Injector, Baroud d’honneur et Omnivamp. Chaque choix peut être enregistré et modifié séparément. Elle regroupe aussi les trois sons du blaster. Les votes sont stockés dans Upstash Redis et la page affiche le décompte A/B par élément.
+La page `/choix.html` présente les quatre nouveaux choix de sons en premier. Une section « Archives », repliée par défaut, conserve les neuf choix d’icônes, le choix du son du Blaster et les cinq premiers effets sonores. Les propositions restent consultables et les votes existants sont conservés dans Upstash Redis. Les décomptes des nouveaux choix et des archives sont affichés séparément. Un lien direct vers une ancienne proposition ouvre automatiquement les archives.
 
 L’API nécessite `KV_REST_API_URL` et `KV_REST_API_TOKEN`, fournis par l’intégration Upstash Redis de Vercel.
 
 Les impacts sur robot, les impacts sur décor, les coups critiques et les dégâts reçus ont chacun deux lecteurs A/B et un vote indépendant sur `/choix.html#impact-robot`. Les huit WAV sont des sons séparés ; aucun montage de comparaison n’est utilisé sur cette page.
+
+Dans `dist/choix.js`, le champ `archived: true` place un effet sonore dans les archives ; les autres apparaissent dans les propositions en cours.
 
 ## Voir le site en local
 

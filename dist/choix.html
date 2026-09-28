@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#12100e">
     <meta name="description" content="Écoute les sons du jeu et vote entre les versions A et B de chaque action de Prototype 0.">
-    <title>Choix des icônes et des sons — Prototype 0</title>
+    <title>Nouveaux choix et archives — Prototype 0</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800;900&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -24,8 +24,8 @@
         <nav class="main-nav" id="main-nav" aria-label="Navigation principale">
           <a href="./index.html">La vitrine</a>
           <a href="./patchs.html">Pushes du jeu</a>
-          <a href="#icones">Les icônes</a>
-          <a href="#sons-jeu">Les sons du jeu</a>
+          <a href="#sons-jeu">Nouveaux choix</a>
+          <a href="#archives">Archives</a>
           <a class="nav-github" href="https://github.com/aKoMoses/PROTOTYPE-V0.1" target="_blank" rel="noopener noreferrer">Voir le GitHub <span aria-hidden="true">↗</span></a>
         </nav>
       </header>
@@ -33,13 +33,30 @@
       <main id="main">
         <section class="choices-hero section-pad">
           <div class="wrap">
-            <p class="section-index"><span>ATELIER</span> / DIRECTION ARTISTIQUE</p>
-            <h1>CHOISIS LES<br><em>ICÔNES DU JEU.</em></h1>
-            <p>Le style gravé du blaster est retenu. Pour chaque autre arme et gadget, compare deux dessins dans cette même direction et sélectionne celui que tu préfères.</p>
-            <div class="choices-hero-facts"><span>01 STYLE VALIDÉ</span><span>09 ÉLÉMENTS À CHOISIR</span><span>02 PROPOSITIONS CHACUN</span></div>
+            <p class="section-index"><span>ATELIER</span> / PROPOSITIONS EN COURS</p>
+            <h1>LES NOUVEAUX<br><em>CHOIX DU JEU.</em></h1>
+            <p>Compare les nouveaux sons d’impact et de dégâts reçus. Choisis A ou B pour chacun ; les anciennes propositions sont dans les archives.</p>
+            <div class="choices-hero-facts"><span>04 SONS À CHOISIR</span><span>02 VERSIONS CHACUN</span><a href="#archives">VOIR LES ARCHIVES ↓</a></div>
           </div>
         </section>
 
+        <section class="game-sfx-section section-pad" id="sons-jeu" aria-labelledby="game-sfx-title">
+          <div class="wrap">
+            <div class="sound-vote-heading">
+              <div><p class="section-index"><span>SONS DU JEU</span> / 04 NOUVEAUX CHOIX</p><h2 id="game-sfx-title">IMPACTS ET<br><em>DÉGÂTS REÇUS.</em></h2></div>
+              <p>Deux versions pour chaque action. Écoute A et B, puis enregistre ton choix. Tu peux revenir le modifier.</p>
+            </div>
+            <label class="vote-name-label sfx-name" for="sfx-voter-name">TON PRÉNOM
+              <input class="vote-name-input" id="sfx-voter-name" name="sfx-voter-name" maxlength="24" autocomplete="given-name" required placeholder="Ton prénom">
+            </label>
+            <div id="game-sfx-list" class="game-sfx-list"></div>
+            <div class="choice-results" aria-labelledby="choice-results-title"><div class="choice-results-head"><h3 id="choice-results-title">VOTES SUR LES NOUVEAUX SONS</h3><button id="refresh-choices" type="button">ACTUALISER ↻</button></div><p id="choice-results-status" role="status" aria-live="polite">Chargement des choix…</p><div id="choice-results-list" class="choice-results-list"></div></div>
+          </div>
+        </section>
+        <div class="choice-archive-section section-pad">
+          <details class="choice-archive" id="archives">
+            <summary><span><strong>ARCHIVES</strong><span>15 anciens choix · icônes, Blaster et premiers effets sonores</span></span><span class="archive-toggle" aria-hidden="true">+</span></summary>
+            <div class="archive-intro wrap"><p>Les anciennes propositions et leurs votes sont conservés ici. Tu peux les revoir, les réécouter et retrouver tes choix.</p></div>
         <section class="choice-workshop section-pad" id="icones" aria-labelledby="choice-title">
           <div class="wrap">
             <div class="choice-reference">
@@ -75,19 +92,15 @@
           </div>
         </section>
 
-        <section class="game-sfx-section section-pad" id="sons-jeu" aria-labelledby="game-sfx-title">
-          <div class="wrap">
-            <div class="sound-vote-heading">
-              <div><p class="section-index"><span>SONS DU JEU</span> / 09 ACTIONS</p><h2 id="game-sfx-title">ÉCOUTE. VOTE.<br><em>CHOISIS LE SON.</em></h2></div>
-              <p>Deux versions pour chaque action. Écoute A et B, puis enregistre ton choix. Tu peux revenir le modifier.</p>
-            </div>
-            <label class="vote-name-label sfx-name" for="sfx-voter-name">TON PRÉNOM
-              <input class="vote-name-input" id="sfx-voter-name" name="sfx-voter-name" maxlength="24" autocomplete="given-name" required placeholder="Ton prénom">
-            </label>
-            <div id="game-sfx-list" class="game-sfx-list"></div>
-            <div class="choice-results" aria-labelledby="choice-results-title"><div class="choice-results-head"><h3 id="choice-results-title">CHOIX ENREGISTRÉS</h3><button id="refresh-choices" type="button">ACTUALISER ↻</button></div><p id="choice-results-status" role="status" aria-live="polite">Chargement des choix…</p><div id="choice-results-list" class="choice-results-list"></div></div>
-          </div>
-        </section>
+            <section class="game-sfx-section section-pad" id="anciens-sons" aria-labelledby="archived-sfx-title">
+              <div class="wrap">
+                <div class="sound-vote-heading"><div><p class="section-index"><span>ARCHIVES</span> / 05 ACTIONS</p><h2 id="archived-sfx-title">PREMIERS<br><em>SONS DU JEU.</em></h2></div></div>
+                <div id="archived-game-sfx-list" class="game-sfx-list"></div>
+                <div class="choice-results" aria-labelledby="archived-results-title"><div class="choice-results-head"><h3 id="archived-results-title">VOTES ARCHIVÉS</h3></div><div id="archived-choice-results-list" class="choice-results-list"></div></div>
+              </div>
+            </section>
+          </details>
+        </div>
       </main>
       <footer class="site-footer"><div class="wrap footer-top"><a class="brand" href="./index.html" aria-label="Retour à la vitrine"><span class="brand-mark">P<span>0</span><i></i></span><span class="brand-name">PROTOTYPE <b>0</b></span></a><a href="./index.html">RETOUR À LA VITRINE ↗</a></div><div class="wrap footer-bottom"><span>UN PROJET DE DEUX FRÈRES.</span><span>PROTOTYPE 0 © 2026</span><a href="#top">RETOUR EN HAUT ↑</a></div></footer>
     </div>

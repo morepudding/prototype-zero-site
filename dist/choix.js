@@ -11,11 +11,11 @@ const equipment = [
 ];
 const soundNames = {impulsion:'Impulsion',plasma:'Plasma',charge:'Charge'};
 const gameSfx = [
-  {id:'drone-launch', name:'MODULO DRONE', action:'LANCEMENT', variants:['Éjection mécanique','Moteur qui démarre']},
-  {id:'pyro-dash', name:'PYRO BOOTS', action:'DASH', variants:['Propulsion','Glissement métallique']},
-  {id:'javelin-teleport', name:'JAVELIN', action:'TÉLÉPORTATION', variants:['Claquement spatial','Aspiration et arrivée']},
-  {id:'magnetic-absorb', name:'MAGNETIC FIELD', action:'PROJECTILE ABSORBÉ', variants:['Choc grave','Impact plus clair']},
-  {id:'robot-destruction', name:'DESTRUCTION D’UN ROBOT', action:'DESTRUCTION', variants:['Rupture du blindage','Panne du noyau']},
+  {id:'drone-launch', archived:true, name:'MODULO DRONE', action:'LANCEMENT', variants:['Éjection mécanique','Moteur qui démarre']},
+  {id:'pyro-dash', archived:true, name:'PYRO BOOTS', action:'DASH', variants:['Propulsion','Glissement métallique']},
+  {id:'javelin-teleport', archived:true, name:'JAVELIN', action:'TÉLÉPORTATION', variants:['Claquement spatial','Aspiration et arrivée']},
+  {id:'magnetic-absorb', archived:true, name:'MAGNETIC FIELD', action:'PROJECTILE ABSORBÉ', variants:['Choc grave','Impact plus clair']},
+  {id:'robot-destruction', archived:true, name:'DESTRUCTION D’UN ROBOT', action:'DESTRUCTION', variants:['Rupture du blindage','Panne du noyau']},
   {id:'impact-robot', name:'IMPACT SUR ROBOT', action:'BLINDAGE TOUCHÉ', variants:['Claquement métallique sec','Choc sourd et touche électrique']},
   {id:'impact-decor', name:'IMPACT SUR DÉCOR', action:'OBSTACLE TOUCHÉ', variants:['Impact sur acier','Impact sur béton']},
   {id:'impact-critique', name:'COUP CRITIQUE', action:'IMPACT RENFORCÉ', variants:['Craquement du blindage','Choc grave et rupture électrique']},
@@ -23,10 +23,14 @@ const gameSfx = [
 ];
 const equipmentList = document.getElementById('equipment-list');
 const gameSfxList = document.getElementById('game-sfx-list');
+const archivedGameSfxList = document.getElementById('archived-game-sfx-list');
+const currentGameSfx = gameSfx.filter(item => !item.archived);
+const archivedGameSfx = gameSfx.filter(item => item.archived);
 const nameInput = document.getElementById('voter-name');
 const sfxNameInput = document.getElementById('sfx-voter-name');
 const resultsStatus = document.getElementById('choice-results-status');
 const resultsList = document.getElementById('choice-results-list');
+const archivedResultsList = document.getElementById('archived-choice-results-list');
 let voterId;
 try {
   voterId = localStorage.getItem('prototype0-voter-id') || crypto.randomUUID();
@@ -81,13 +85,15 @@ const soundForm = document.getElementById('sound-vote-form');
 const storedSound = savedChoice('prototype0-blaster-sound');
 if (soundNames[storedSound]) soundForm.querySelector(`input[value="${storedSound}"]`).checked = true;
 
-for (const [index, item] of gameSfx.entries()) {
+for (const item of gameSfx) {
+  const group = item.archived ? archivedGameSfx : currentGameSfx;
+  const index = group.indexOf(item);
   const section = document.createElement('section');
   section.className = 'game-sfx-choice';
   section.id = item.id;
   section.innerHTML = `
     <div class="game-sfx-choice-head">
-      <p class="section-index"><span>${String(index + 1).padStart(2,'0')} / ${String(gameSfx.length).padStart(2,'0')}</span> · ${item.action}</p>
+      <p class="section-index"><span>${String(index + 1).padStart(2,'0')} / ${String(group.length).padStart(2,'0')}</span> · ${item.action}</p>
       <h3>${item.name}</h3>
     </div>
     <form class="game-sfx-vote" data-item="${item.id}">
@@ -107,7 +113,7 @@ for (const [index, item] of gameSfx.entries()) {
       </fieldset>
       <div class="sound-vote-action"><button class="button button-primary" type="submit">ENREGISTRER CE SON <span aria-hidden="true">↗</span></button><p class="sound-vote-status" role="status" aria-live="polite"></p></div>
     </form>`;
-  gameSfxList.append(section);
+  (item.archived ? archivedGameSfxList : gameSfxList).append(section);
   const stored = savedChoice(`prototype0-game-sfx-${item.id}`);
   if (stored === 'a' || stored === 'b') section.querySelector(`input[value="${stored}"]`).checked = true;
 }
@@ -156,9 +162,6 @@ equipmentList.addEventListener('submit', event => {
   }, `prototype0-icon-${form.dataset.item}`);
 });
 
-soundForm.querySelectorAll('audio').forEach(audio => audio.addEventListener('play', () => {
-  soundForm.querySelectorAll('audio').forEach(other => { if (other !== audio) other.pause(); });
-}));
 soundForm.addEventListener('submit', event => {
   event.preventDefault();
   const selected = soundForm.querySelector('input:checked');
@@ -168,10 +171,10 @@ soundForm.addEventListener('submit', event => {
   }, 'prototype0-blaster-sound');
 });
 
-gameSfxList.querySelectorAll('audio').forEach(audio => audio.addEventListener('play', () => {
+document.querySelectorAll('.choices-page audio').forEach(audio => audio.addEventListener('play', () => {
   document.querySelectorAll('.choices-page audio').forEach(other => { if (other !== audio) other.pause(); });
 }));
-gameSfxList.addEventListener('submit', event => {
+for (const list of [gameSfxList, archivedGameSfxList]) list.addEventListener('submit', event => {
   const form = event.target.closest('.game-sfx-vote');
   if (!form) return;
   event.preventDefault();
@@ -184,6 +187,7 @@ gameSfxList.addEventListener('submit', event => {
 
 function renderChoices(choices) {
   resultsList.replaceChildren();
+  archivedResultsList.replaceChildren();
   resultsStatus.textContent = choices.length ? `${choices.length} personne${choices.length > 1 ? 's ont' : ' a'} enregistré des choix.` : 'Aucun choix enregistré pour le moment.';
   for (const item of equipment) {
     const a = choices.filter(choice => choice.icons?.[item.id] === 'a').length;
@@ -195,7 +199,7 @@ function renderChoices(choices) {
     const counts = document.createElement('span');
     counts.textContent = `A · ${a}     B · ${b}`;
     row.append(title, counts);
-    resultsList.append(row);
+    archivedResultsList.append(row);
   }
   const soundRow = document.createElement('div');
   soundRow.className = 'choice-tally';
@@ -204,7 +208,7 @@ function renderChoices(choices) {
   const soundCounts = document.createElement('span');
   soundCounts.textContent = Object.entries(soundNames).map(([id, label]) => `${label} · ${choices.filter(choice => choice.sound === id).length}`).join('   ');
   soundRow.append(soundTitle, soundCounts);
-  resultsList.append(soundRow);
+  archivedResultsList.append(soundRow);
   for (const item of gameSfx) {
     const a = choices.filter(choice => choice.gameSfx?.[item.id] === 'a').length;
     const b = choices.filter(choice => choice.gameSfx?.[item.id] === 'b').length;
@@ -215,7 +219,7 @@ function renderChoices(choices) {
     const counts = document.createElement('span');
     counts.textContent = `A · ${a}     B · ${b}`;
     row.append(title, counts);
-    resultsList.append(row);
+    (item.archived ? archivedResultsList : resultsList).append(row);
   }
 }
 async function refreshChoices() {
@@ -230,6 +234,19 @@ async function refreshChoices() {
 }
 document.getElementById('refresh-choices').addEventListener('click', refreshChoices);
 refreshChoices();
+
+// Keep direct links usable for proposals inside the collapsed archive.
+function revealLinkedChoice() {
+  let id;
+  try { id = decodeURIComponent(location.hash.slice(1)); } catch (_) { return; }
+  const target = document.getElementById(id);
+  if (!target) return;
+  const archive = target.closest('details');
+  if (archive) archive.open = true;
+  target.scrollIntoView({block:'start'});
+}
+window.addEventListener('hashchange', revealLinkedChoice);
+revealLinkedChoice();
 
 const menuToggle = document.querySelector('.menu-toggle');
 const nav = document.querySelector('.main-nav');
