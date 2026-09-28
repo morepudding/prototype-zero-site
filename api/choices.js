@@ -6,7 +6,7 @@ const VOTE_EVENTS_KEY = 'prototype0:discord:vote-events';
 const VALID_STYLES = new Set(['01', '02', '03', '04', '05']);
 const VALID_SOUNDS = new Set(['impulsion', 'plasma', 'charge']);
 const EQUIPMENT = new Set(['shotgun', 'modulo_drone', 'javelin', 'magnetic_field', 'static_shield', 'pyro_boots', 'bio_injector', 'baroud', 'omnivamp']);
-const GAME_SFX = new Set(['drone-launch', 'pyro-dash', 'javelin-teleport', 'magnetic-absorb', 'robot-destruction', 'impact-robot', 'impact-decor', 'impact-critique', 'degats-recus']);
+const GAME_SFX = new Set(['drone-launch', 'pyro-dash', 'javelin-teleport', 'magnetic-absorb', 'robot-destruction', 'impact-robot', 'impact-decor', 'impact-critique', 'degats-recus', 'robot-footsteps', 'bush-entry', 'bush-exit', 'bush-movement', 'enemy-shot', 'enemy-melee', 'enemy-charge-warning', 'low-health', 'baroud-activation']);
 const VARIANTS = new Set(['a', 'b']);
 const ID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 

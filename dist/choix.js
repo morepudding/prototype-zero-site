@@ -16,10 +16,19 @@ const gameSfx = [
   {id:'javelin-teleport', archived:true, name:'JAVELIN', action:'TÉLÉPORTATION', variants:['Claquement spatial','Aspiration et arrivée']},
   {id:'magnetic-absorb', archived:true, name:'MAGNETIC FIELD', action:'PROJECTILE ABSORBÉ', variants:['Choc grave','Impact plus clair']},
   {id:'robot-destruction', archived:true, name:'DESTRUCTION D’UN ROBOT', action:'DESTRUCTION', variants:['Rupture du blindage','Panne du noyau']},
-  {id:'impact-robot', name:'IMPACT SUR ROBOT', action:'BLINDAGE TOUCHÉ', variants:['Claquement métallique sec','Choc sourd et touche électrique']},
-  {id:'impact-decor', name:'IMPACT SUR DÉCOR', action:'OBSTACLE TOUCHÉ', variants:['Impact sur acier','Impact sur béton']},
-  {id:'impact-critique', name:'COUP CRITIQUE', action:'IMPACT RENFORCÉ', variants:['Craquement du blindage','Choc grave et rupture électrique']},
-  {id:'degats-recus', name:'DÉGÂTS REÇUS', action:'LE JOUEUR EST TOUCHÉ', variants:['Coup sec sur le châssis','Choc sourd et baisse d’énergie']}
+  {id:'impact-robot', archived:true, name:'IMPACT SUR ROBOT', action:'BLINDAGE TOUCHÉ', variants:['Claquement métallique sec','Choc sourd et touche électrique']},
+  {id:'impact-decor', archived:true, name:'IMPACT SUR DÉCOR', action:'OBSTACLE TOUCHÉ', variants:['Impact sur acier','Impact sur béton']},
+  {id:'impact-critique', archived:true, name:'COUP CRITIQUE', action:'IMPACT RENFORCÉ', variants:['Craquement du blindage','Choc grave et rupture électrique']},
+  {id:'degats-recus', archived:true, name:'DÉGÂTS REÇUS', action:'LE JOUEUR EST TOUCHÉ', variants:['Coup sec sur le châssis','Choc sourd et baisse d’énergie']},
+  {id:'robot-footsteps', name:'PAS DU ROBOT', action:'DÉPLACEMENT', variants:['Appuis métalliques secs · 4 variations','Appuis amortis et hydrauliques · 4 variations']},
+  {id:'bush-entry', name:'ENTRÉE DANS UN BUISSON', action:'LE ROBOT ENTRE DANS LES HERBES', variants:['Herbes sèches contre le blindage','Feuillage souple et froissement doux']},
+  {id:'bush-exit', name:'SORTIE DU BUISSON', action:'LE ROBOT QUITTE LES HERBES', variants:['Feuilles sèches et petite branche','Balayage doux du feuillage']},
+  {id:'bush-movement', name:'MOUVEMENT DANS LE BUISSON', action:'LE ROBOT AVANCE DANS LES HERBES', variants:['Bruissement léger d’herbes sèches','Frottement doux des feuilles']},
+  {id:'enemy-shot', name:'TIR ENNEMI', action:'L’ENNEMI TIRE', variants:['Départ pneumatique et culasse','Impulsion électrique grave']},
+  {id:'enemy-melee', name:'COUP ENNEMI AU CONTACT', action:'L’ENNEMI FRAPPE', variants:['Frappe métallique sèche','Coup sourd de piston']},
+  {id:'enemy-charge-warning', name:'AVERTISSEMENT DE CHARGE', action:'L’ENNEMI PRÉPARE SA CHARGE', variants:['Mécanisme qui se tend','Signal montant et aspiration']},
+  {id:'low-health', name:'VIE FAIBLE', action:'PASSAGE SOUS LE SEUIL DE VIE', variants:['Alerte électronique aiguë','Impulsion grave de batterie faible']},
+  {id:'baroud-activation', name:'BAROUD D’HONNEUR', action:'LA DERNIÈRE CHANCE SE DÉCLENCHE', variants:['Redémarrage du moteur de secours','Surcharge électrique de réserve']}
 ];
 const equipmentList = document.getElementById('equipment-list');
 const gameSfxList = document.getElementById('game-sfx-list');

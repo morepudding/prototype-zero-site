@@ -61,6 +61,27 @@ test('saves independent A/B game sounds without changing existing votes', async 
   assert.equal(updated.body.choices[0].sound, 'plasma');
   assert.equal(updated.body.choices[0].icons.shotgun, 'a');
 
+  const nextBatch = ['robot-footsteps', 'bush-entry', 'bush-exit', 'bush-movement', 'enemy-shot', 'enemy-melee', 'enemy-charge-warning', 'low-health', 'baroud-activation'];
+  for (const item of nextBatch) {
+    const saved = respond();
+    await handler(request({id, name: 'Ben', kind: 'game-sfx', item, value: 'b'}), saved);
+    assert.equal(saved.code, 200);
+    assert.equal(saved.body.choices[0].gameSfx[item], 'b');
+  }
+  const nextUpdate = respond();
+  await handler(request({id, name: 'Ben', kind: 'game-sfx', item: 'bush-entry', value: 'a'}), nextUpdate);
+  assert.equal(nextUpdate.code, 200);
+  for (const item of nextBatch) {
+    assert.equal(nextUpdate.body.choices[0].gameSfx[item], item === 'bush-entry' ? 'a' : 'b');
+  }
+  for (const item of impacts) {
+    assert.equal(nextUpdate.body.choices[0].gameSfx[item], item === 'degats-recus' ? 'b' : 'a');
+  }
+  assert.equal(nextUpdate.body.choices[0].gameSfx['drone-launch'], 'a');
+  assert.equal(nextUpdate.body.choices[0].gameSfx['pyro-dash'], 'b');
+  assert.equal(nextUpdate.body.choices[0].sound, 'plasma');
+  assert.equal(nextUpdate.body.choices[0].icons.shotgun, 'a');
+
   const invalid = respond();
   await handler(request({id, name: 'Ben', kind: 'game-sfx', item: 'shotgun', value: 'a'}), invalid);
   assert.equal(invalid.code, 400);

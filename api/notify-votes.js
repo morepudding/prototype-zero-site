@@ -19,7 +19,16 @@ const GAME_SFX_LABELS = {
   'impact-robot': 'impact sur robot',
   'impact-decor': 'impact sur décor',
   'impact-critique': 'coup critique',
-  'degats-recus': 'dégâts reçus'
+  'degats-recus': 'dégâts reçus',
+  'robot-footsteps': 'pas du robot',
+  'bush-entry': 'entrée dans un buisson',
+  'bush-exit': 'sortie du buisson',
+  'bush-movement': 'mouvement dans le buisson',
+  'enemy-shot': 'tir ennemi',
+  'enemy-melee': 'coup ennemi au contact',
+  'enemy-charge-warning': 'avertissement de charge',
+  'low-health': 'alerte de vie faible',
+  'baroud-activation': 'déclenchement de Baroud d’honneur'
 };
 
 function authorized(request) {
