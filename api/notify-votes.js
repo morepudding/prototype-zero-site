@@ -10,6 +10,13 @@ const LABELS = {
   pyro_boots: 'Pyro Boots', bio_injector: 'Bio Injector',
   baroud: 'Baroud d’honneur', omnivamp: 'Omnivamp'
 };
+const GAME_SFX_LABELS = {
+  'drone-launch': 'lancement du Modulo Drone',
+  'pyro-dash': 'dash des Pyro Boots',
+  'javelin-teleport': 'téléportation du Javelin',
+  'magnetic-absorb': 'absorption du Magnetic Field',
+  'robot-destruction': 'destruction d’un robot'
+};
 
 function authorized(request) {
   const secret = process.env.NOTIFICATION_CRON_SECRET;
@@ -25,7 +32,7 @@ function summarize(rawEvents) {
   for (const raw of rawEvents) {
     try {
       const event = typeof raw === 'string' ? JSON.parse(raw) : raw;
-      if (!event || !event.id || !event.name || !['icon', 'sound', 'style'].includes(event.kind)) continue;
+      if (!event || !event.id || !event.name || !['icon', 'sound', 'style', 'game-sfx'].includes(event.kind)) continue;
       latest.set(`${event.id}:${event.kind}:${event.item || ''}`, event);
     } catch (_) { /* Ignore an invalid queued item. */ }
   }
@@ -33,7 +40,7 @@ function summarize(rawEvents) {
   for (const event of latest.values()) {
     const name = String(event.name).replace(/[\r\n*_`~|<>@]/g, '').slice(0, 24) || 'Quelqu’un';
     if (!byPerson.has(name)) byPerson.set(name, []);
-    byPerson.get(name).push(event.kind === 'icon' ? LABELS[event.item] || event.item : event.kind === 'sound' ? 'son du Blaster' : 'style du Blaster');
+    byPerson.get(name).push(event.kind === 'icon' ? LABELS[event.item] || event.item : event.kind === 'game-sfx' ? GAME_SFX_LABELS[event.item] || event.item : event.kind === 'sound' ? 'son du Blaster' : 'style du Blaster');
   }
   if (!byPerson.size) return null;
   const lines = [...byPerson].map(([name, items]) => `• **${name}** a enregistré ${items.length} choix : ${items.join(', ')}.`);

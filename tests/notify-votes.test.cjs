@@ -20,6 +20,14 @@ test('removes Discord formatting and mentions from voter names', () => {
   assert.match(summary, /everyone/);
 });
 
+test('includes game sound votes in the summary', () => {
+  const summary = summarize([
+    JSON.stringify({ id: 'one', name: 'Ben', kind: 'game-sfx', item: 'drone-launch' }),
+    JSON.stringify({ id: 'one', name: 'Ben', kind: 'game-sfx', item: 'robot-destruction' })
+  ]);
+  assert.match(summary, /Ben\*\* a enregistré 2 choix : lancement du Modulo Drone, destruction d’un robot/);
+});
+
 test('ignores malformed queued events', () => {
   assert.equal(summarize(['oops', '{}']), null);
 });

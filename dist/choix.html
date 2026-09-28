@@ -4,8 +4,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#12100e">
-    <meta name="description" content="Compare deux propositions d'icônes gravées pour chaque arme et gadget de Prototype 0.">
-    <title>Choix des icônes — Prototype 0</title>
+    <meta name="description" content="Écoute les sons du jeu et vote entre les versions A et B de chaque action de Prototype 0.">
+    <title>Choix des icônes et des sons — Prototype 0</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800;900&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -25,7 +25,7 @@
           <a href="./index.html">La vitrine</a>
           <a href="./patchs.html">Pushes du jeu</a>
           <a href="#icones">Les icônes</a>
-          <a href="#sons-blaster">Le son du blaster</a>
+          <a href="#sons-jeu">Les sons du jeu</a>
           <a class="nav-github" href="https://github.com/aKoMoses/PROTOTYPE-V0.1" target="_blank" rel="noopener noreferrer">Voir le GitHub <span aria-hidden="true">↗</span></a>
         </nav>
       </header>
@@ -72,6 +72,19 @@
               </fieldset>
               <div class="sound-vote-action"><button class="button button-primary" type="submit">ENREGISTRER CE SON <span aria-hidden="true">↗</span></button><p class="sound-vote-status" id="sound-vote-status" role="status" aria-live="polite"></p></div>
             </form>
+          </div>
+        </section>
+
+        <section class="game-sfx-section section-pad" id="sons-jeu" aria-labelledby="game-sfx-title">
+          <div class="wrap">
+            <div class="sound-vote-heading">
+              <div><p class="section-index"><span>SONS DU JEU</span> / 05 ACTIONS</p><h2 id="game-sfx-title">ÉCOUTE. VOTE.<br><em>CHOISIS LE SON.</em></h2></div>
+              <p>Deux versions pour chaque action. Écoute A et B, puis enregistre ton choix. Tu peux revenir le modifier.</p>
+            </div>
+            <label class="vote-name-label sfx-name" for="sfx-voter-name">TON PRÉNOM
+              <input class="vote-name-input" id="sfx-voter-name" name="sfx-voter-name" maxlength="24" autocomplete="given-name" required placeholder="Ton prénom">
+            </label>
+            <div id="game-sfx-list" class="game-sfx-list"></div>
             <div class="choice-results" aria-labelledby="choice-results-title"><div class="choice-results-head"><h3 id="choice-results-title">CHOIX ENREGISTRÉS</h3><button id="refresh-choices" type="button">ACTUALISER ↻</button></div><p id="choice-results-status" role="status" aria-live="polite">Chargement des choix…</p><div id="choice-results-list" class="choice-results-list"></div></div>
           </div>
         </section>

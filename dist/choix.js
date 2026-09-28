@@ -10,8 +10,17 @@ const equipment = [
   {id:'omnivamp', name:'OMNIVAMP', category:'PASSIF', description:'Récupère une part des dégâts infligés.', variants:['Siphon circulaire','Griffe et réservoir d’énergie']}
 ];
 const soundNames = {impulsion:'Impulsion',plasma:'Plasma',charge:'Charge'};
+const gameSfx = [
+  {id:'drone-launch', name:'MODULO DRONE', action:'LANCEMENT', variants:['Éjection mécanique','Moteur qui démarre']},
+  {id:'pyro-dash', name:'PYRO BOOTS', action:'DASH', variants:['Propulsion','Glissement métallique']},
+  {id:'javelin-teleport', name:'JAVELIN', action:'TÉLÉPORTATION', variants:['Claquement spatial','Aspiration et arrivée']},
+  {id:'magnetic-absorb', name:'MAGNETIC FIELD', action:'PROJECTILE ABSORBÉ', variants:['Choc grave','Impact plus clair']},
+  {id:'robot-destruction', name:'DESTRUCTION D’UN ROBOT', action:'DESTRUCTION', variants:['Rupture du blindage','Panne du noyau']}
+];
 const equipmentList = document.getElementById('equipment-list');
+const gameSfxList = document.getElementById('game-sfx-list');
 const nameInput = document.getElementById('voter-name');
+const sfxNameInput = document.getElementById('sfx-voter-name');
 const resultsStatus = document.getElementById('choice-results-status');
 const resultsList = document.getElementById('choice-results-list');
 let voterId;
@@ -19,6 +28,7 @@ try {
   voterId = localStorage.getItem('prototype0-voter-id') || crypto.randomUUID();
   localStorage.setItem('prototype0-voter-id', voterId);
   nameInput.value = localStorage.getItem('prototype0-voter-name') || '';
+  sfxNameInput.value = nameInput.value;
 } catch (_) {
   voterId = crypto.randomUUID();
 }
@@ -26,9 +36,15 @@ try {
 function savedChoice(key) {
   try { return localStorage.getItem(key); } catch (_) { return null; }
 }
-nameInput.addEventListener('input', () => {
-  try { localStorage.setItem('prototype0-voter-name', nameInput.value); } catch (_) { /* The form remains usable. */ }
-});
+for (const input of [nameInput, sfxNameInput]) {
+  input.addEventListener('input', () => {
+    const other = input === nameInput ? sfxNameInput : nameInput;
+    other.value = input.value;
+    nameInput.setCustomValidity('');
+    sfxNameInput.setCustomValidity('');
+    try { localStorage.setItem('prototype0-voter-name', input.value); } catch (_) { /* The form remains usable. */ }
+  });
+}
 
 for (const [index, item] of equipment.entries()) {
   const section = document.createElement('section');
@@ -61,11 +77,42 @@ const soundForm = document.getElementById('sound-vote-form');
 const storedSound = savedChoice('prototype0-blaster-sound');
 if (soundNames[storedSound]) soundForm.querySelector(`input[value="${storedSound}"]`).checked = true;
 
+for (const [index, item] of gameSfx.entries()) {
+  const section = document.createElement('section');
+  section.className = 'game-sfx-choice';
+  section.innerHTML = `
+    <div class="game-sfx-choice-head">
+      <p class="section-index"><span>${String(index + 1).padStart(2,'0')} / 05</span> · ${item.action}</p>
+      <h3>${item.name}</h3>
+    </div>
+    <form class="game-sfx-vote" data-item="${item.id}">
+      <fieldset class="sound-vote-grid game-sfx-vote-grid">
+        <legend class="sr-only">Choisis un son pour ${item.name}</legend>
+        ${['a','b'].map((variant, number) => `
+          <article class="sound-option">
+            <input type="radio" id="sfx-${item.id}-${variant}" name="sfx-${item.id}" value="${variant}" required>
+            <label for="sfx-${item.id}-${variant}">
+              <span class="sound-option-number">VERSION ${variant.toUpperCase()}</span>
+              <strong>${variant.toUpperCase()}</strong>
+              <span class="sound-option-description">${item.variants[number]}</span>
+              <span class="sound-option-choose">CHOISIR CE SON ↗</span>
+            </label>
+            <audio controls preload="none" src="./assets/audio/game-sfx/${item.id}-${variant.toUpperCase()}.wav" aria-label="Écouter ${item.name}, version ${variant.toUpperCase()} : ${item.variants[number]}">Votre navigateur ne prend pas en charge l’audio.</audio>
+          </article>`).join('')}
+      </fieldset>
+      <div class="sound-vote-action"><button class="button button-primary" type="submit">ENREGISTRER CE SON <span aria-hidden="true">↗</span></button><p class="sound-vote-status" role="status" aria-live="polite"></p></div>
+    </form>`;
+  gameSfxList.append(section);
+  const stored = savedChoice(`prototype0-game-sfx-${item.id}`);
+  if (stored === 'a' || stored === 'b') section.querySelector(`input[value="${stored}"]`).checked = true;
+}
+
 function requireName() {
-  const name = nameInput.value.trim().replace(/\s+/g, ' ');
-  nameInput.setCustomValidity(name ? '' : 'Saisis ton prénom pour enregistrer tes choix.');
-  if (!nameInput.reportValidity()) {
-    nameInput.focus();
+  const activeInput = document.activeElement?.closest('#sons-jeu') ? sfxNameInput : nameInput;
+  const name = activeInput.value.trim().replace(/\s+/g, ' ');
+  activeInput.setCustomValidity(name ? '' : 'Saisis ton prénom pour enregistrer tes choix.');
+  if (!activeInput.reportValidity()) {
+    activeInput.focus();
     return null;
   }
   return name;
@@ -116,6 +163,20 @@ soundForm.addEventListener('submit', event => {
   }, 'prototype0-blaster-sound');
 });
 
+gameSfxList.querySelectorAll('audio').forEach(audio => audio.addEventListener('play', () => {
+  document.querySelectorAll('.choices-page audio').forEach(other => { if (other !== audio) other.pause(); });
+}));
+gameSfxList.addEventListener('submit', event => {
+  const form = event.target.closest('.game-sfx-vote');
+  if (!form) return;
+  event.preventDefault();
+  const selected = form.querySelector('input:checked');
+  if (!selected || !form.reportValidity()) return;
+  saveVote(form.querySelector('button[type="submit"]'), form.querySelector('.sound-vote-status'), {
+    kind:'game-sfx', item:form.dataset.item, value:selected.value
+  }, `prototype0-game-sfx-${form.dataset.item}`);
+});
+
 function renderChoices(choices) {
   resultsList.replaceChildren();
   resultsStatus.textContent = choices.length ? `${choices.length} personne${choices.length > 1 ? 's' : ''} ont enregistré des choix.` : 'Aucun choix enregistré pour le moment.';
@@ -139,6 +200,18 @@ function renderChoices(choices) {
   soundCounts.textContent = Object.entries(soundNames).map(([id, label]) => `${label} · ${choices.filter(choice => choice.sound === id).length}`).join('   ');
   soundRow.append(soundTitle, soundCounts);
   resultsList.append(soundRow);
+  for (const item of gameSfx) {
+    const a = choices.filter(choice => choice.gameSfx?.[item.id] === 'a').length;
+    const b = choices.filter(choice => choice.gameSfx?.[item.id] === 'b').length;
+    const row = document.createElement('div');
+    row.className = 'choice-tally';
+    const title = document.createElement('strong');
+    title.textContent = `${item.name} · SON`;
+    const counts = document.createElement('span');
+    counts.textContent = `A · ${a}     B · ${b}`;
+    row.append(title, counts);
+    resultsList.append(row);
+  }
 }
 async function refreshChoices() {
   resultsStatus.textContent = 'Chargement des choix…';
