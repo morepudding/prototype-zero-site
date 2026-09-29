@@ -1,0 +1,440 @@
+{
+  "history": {
+    "date": "2026-09-29",
+    "dateLabel": "29 septembre 2026",
+    "head": "a2c3534",
+    "repository": "aKoMoses/PROTOTYPE-V0.1",
+    "totalCommits": 118,
+    "nonMergeCommits": 109,
+    "mergeCommits": 9,
+    "authors": {
+      "akomoses": {
+        "total": 80,
+        "nonMerge": 75
+      },
+      "morepudding": {
+        "total": 38,
+        "nonMerge": 34
+      }
+    },
+    "method": "Lecture de tous les titres et des fichiers modifiés, puis examen des changements clés. Les merges, imports Godot, captures et dépendances ne sont pas traités comme des fonctionnalités indépendantes. Le volume de lignes ne suffit pas à établir une responsabilité. Les auteurs des commits sont des indices, pas une preuve exhaustive des décisions prises hors Git."
+  },
+  "sectors": [
+    {
+      "id": "conception-equilibrage",
+      "owner": "both",
+      "reason": "Akomoses a construit les règles, les armes et les statistiques des modules. morepudding a ajouté les châssis, les récompenses et la progression de survie : l’équilibrage traverse vos deux domaines.",
+      "commits": [
+        {
+          "sha": "8267eb7",
+          "owner": "akomoses"
+        },
+        {
+          "sha": "25cfcd5",
+          "owner": "morepudding"
+        },
+        {
+          "sha": "395b533",
+          "owner": "morepudding"
+        }
+      ],
+      "confidence": "supported"
+    },
+    {
+      "id": "armes-combat",
+      "owner": "akomoses",
+      "reason": "Akomoses a créé le Shotgun, le Blaster chargé et les règles de combat. morepudding a ensuite corrigé les projectiles et leur intégration à la survie ; je propose de garder la responsabilité principale du combat à Akomoses.",
+      "commits": [
+        {
+          "sha": "e853188",
+          "owner": "akomoses"
+        },
+        {
+          "sha": "0d37584",
+          "owner": "akomoses"
+        },
+        {
+          "sha": "a2c3534",
+          "owner": "morepudding"
+        }
+      ],
+      "confidence": "supported"
+    },
+    {
+      "id": "sorts-modules",
+      "owner": "akomoses",
+      "reason": "Les modules offensifs, défensifs, de mobilité et les passifs ont été créés par Akomoses, puis complétés avec Fulguro Punch et Pelto Smash. Les évolutions propres à la survie restent dans le secteur de morepudding.",
+      "commits": [
+        {
+          "sha": "df10674",
+          "owner": "akomoses"
+        },
+        {
+          "sha": "d143837",
+          "owner": "akomoses"
+        },
+        {
+          "sha": "8267eb7",
+          "owner": "akomoses"
+        }
+      ],
+      "confidence": "supported"
+    },
+    {
+      "id": "map-level-design",
+      "owner": "akomoses",
+      "reason": "Akomoses a reconstruit l’arène, agrandi les buissons et ajouté les kits de réparation. Les corrections de navigation des bots par morepudding relèvent surtout de l’IA.",
+      "commits": [
+        {
+          "sha": "ad62fe1",
+          "owner": "akomoses"
+        },
+        {
+          "sha": "dce966d",
+          "owner": "akomoses"
+        },
+        {
+          "sha": "f0fd517",
+          "owner": "akomoses"
+        }
+      ],
+      "confidence": "supported"
+    },
+    {
+      "id": "intelligence-artificielle",
+      "owner": "both",
+      "reason": "Akomoses a créé les bots, leurs esquives et leurs profils tactiques. morepudding a amélioré la perception, les couverts, les équipements et l’état des bots. Les deux contributions sont substantielles.",
+      "commits": [
+        {
+          "sha": "beecbd0",
+          "owner": "akomoses"
+        },
+        {
+          "sha": "f0fd517",
+          "owner": "akomoses"
+        },
+        {
+          "sha": "50b10d8",
+          "owner": "morepudding"
+        },
+        {
+          "sha": "a2c3534",
+          "owner": "morepudding"
+        }
+      ],
+      "confidence": "supported"
+    },
+    {
+      "id": "mode-survie",
+      "owner": "morepudding",
+      "reason": "morepudding a créé le mode, ses vagues, les choix entre vagues, les synergies et les évolutions. Akomoses y a intégré ses nouveaux sorts et ajusté des tests ; la direction du mode reste principalement portée par morepudding.",
+      "commits": [
+        {
+          "sha": "395b533",
+          "owner": "morepudding"
+        },
+        {
+          "sha": "d0779d9",
+          "owner": "morepudding"
+        },
+        {
+          "sha": "a2c3534",
+          "owner": "morepudding"
+        }
+      ],
+      "confidence": "supported"
+    },
+    {
+      "id": "duel-manches",
+      "owner": "both",
+      "reason": "Akomoses a créé le déroulement local des matchs et des manches. morepudding a repris le compte à rebours, les retours de match et l’intégration du combat en ligne.",
+      "commits": [
+        {
+          "sha": "b354eb9",
+          "owner": "akomoses"
+        },
+        {
+          "sha": "4122ce5",
+          "owner": "morepudding"
+        },
+        {
+          "sha": "a2c3534",
+          "owner": "morepudding"
+        }
+      ],
+      "confidence": "supported"
+    },
+    {
+      "id": "multijoueur",
+      "owner": "morepudding",
+      "reason": "Le lobby hébergé, la session réseau, les corrections de connexion et la synchronisation du combat ont été ajoutés par morepudding.",
+      "commits": [
+        {
+          "sha": "5924f4f",
+          "owner": "morepudding"
+        },
+        {
+          "sha": "0a0677d",
+          "owner": "morepudding"
+        },
+        {
+          "sha": "a2c3534",
+          "owner": "morepudding"
+        }
+      ],
+      "confidence": "supported"
+    },
+    {
+      "id": "entrainement",
+      "owner": "both",
+      "reason": "Akomoses a créé les bots et les premiers mannequins de test. morepudding a construit le menu dédié, la barre de sorts et le compteur de dégâts. Le secteur réunit les outils de test et leur interface.",
+      "commits": [
+        {
+          "sha": "5f14f5f",
+          "owner": "akomoses"
+        },
+        {
+          "sha": "896e738",
+          "owner": "akomoses"
+        },
+        {
+          "sha": "1e8b3de",
+          "owner": "morepudding"
+        },
+        {
+          "sha": "17acd2e",
+          "owner": "morepudding"
+        }
+      ],
+      "confidence": "supported"
+    },
+    {
+      "id": "interface-menus",
+      "owner": "both",
+      "reason": "morepudding a retravaillé les menus, le HUD, les cartes et les indicateurs de recharge. Akomoses a récemment ajouté l’éditeur de HUD et sa disposition personnalisable : je propose donc une responsabilité commune.",
+      "commits": [
+        {
+          "sha": "f1594b1",
+          "owner": "morepudding"
+        },
+        {
+          "sha": "9968db0",
+          "owner": "morepudding"
+        },
+        {
+          "sha": "8267eb7",
+          "owner": "akomoses"
+        }
+      ],
+      "confidence": "supported"
+    },
+    {
+      "id": "controles-camera",
+      "owner": "both",
+      "reason": "Akomoses a posé la caméra et les contrôles tactiles, puis amélioré l’ergonomie mobile. morepudding a ajouté les réglages de confort et les raccourcis reconfigurables.",
+      "commits": [
+        {
+          "sha": "9510a62",
+          "owner": "akomoses"
+        },
+        {
+          "sha": "1c3698a",
+          "owner": "akomoses"
+        },
+        {
+          "sha": "74e4a52",
+          "owner": "akomoses"
+        },
+        {
+          "sha": "a2c3534",
+          "owner": "morepudding"
+        }
+      ],
+      "confidence": "supported"
+    },
+    {
+      "id": "direction-artistique",
+      "owner": "akomoses",
+      "reason": "Les passes successives sur les décors, la lumière et l’identité de l’arène proviennent principalement d’Akomoses. Les créations de robots et d’interface de morepudding sont couvertes par leurs secteurs respectifs.",
+      "commits": [
+        {
+          "sha": "f929315",
+          "owner": "akomoses"
+        },
+        {
+          "sha": "f70ec80",
+          "owner": "akomoses"
+        },
+        {
+          "sha": "9b35784",
+          "owner": "akomoses"
+        }
+      ],
+      "confidence": "supported"
+    },
+    {
+      "id": "robots-animations",
+      "owner": "both",
+      "reason": "Akomoses a travaillé la locomotion, les poses et les animations des armes. morepudding a ajouté les variantes de châssis, leurs caractéristiques et leur présentation visuelle.",
+      "commits": [
+        {
+          "sha": "d4881da",
+          "owner": "akomoses"
+        },
+        {
+          "sha": "f7537f1",
+          "owner": "akomoses"
+        },
+        {
+          "sha": "25cfcd5",
+          "owner": "morepudding"
+        },
+        {
+          "sha": "a2c3534",
+          "owner": "morepudding"
+        }
+      ],
+      "confidence": "supported"
+    },
+    {
+      "id": "effets-visuels",
+      "owner": "akomoses",
+      "reason": "Akomoses porte les passes principales sur les impacts, les traînées, les effets de statut et les télégraphes. morepudding a corrigé la lisibilité des projectiles et ajouté des effets de survie, sans reprendre la direction générale de ce secteur.",
+      "commits": [
+        {
+          "sha": "7e18b04",
+          "owner": "akomoses"
+        },
+        {
+          "sha": "f7537f1",
+          "owner": "akomoses"
+        },
+        {
+          "sha": "31d2979",
+          "owner": "morepudding"
+        }
+      ],
+      "confidence": "supported"
+    },
+    {
+      "id": "effets-sonores",
+      "owner": "both",
+      "reason": "Les commits de morepudding indiquent explicitement l’intégration de sons sélectionnés par Ben, puis Akomoses a ajouté les sons liés aux kits de réparation. Les choix et l’intégration sont partagés ; l’auteur d’un commit seul ne raconte pas tout le travail.",
+      "commits": [
+        {
+          "sha": "63366f4",
+          "owner": "morepudding"
+        },
+        {
+          "sha": "949eb30",
+          "owner": "morepudding"
+        },
+        {
+          "sha": "f0fd517",
+          "owner": "akomoses"
+        }
+      ],
+      "confidence": "supported"
+    },
+    {
+      "id": "musique",
+      "owner": "morepudding",
+      "reason": "morepudding a intégré la musique du menu, la boucle de duel et la musique adaptative des vagues de survie. Aucun travail musical comparable n’apparaît dans les commits d’Akomoses examinés.",
+      "commits": [
+        {
+          "sha": "b8ba71e",
+          "owner": "morepudding"
+        },
+        {
+          "sha": "e2f99a3",
+          "owner": "morepudding"
+        },
+        {
+          "sha": "c7030f4",
+          "owner": "morepudding"
+        }
+      ],
+      "confidence": "supported"
+    },
+    {
+      "id": "tests-corrections",
+      "owner": "both",
+      "reason": "Vous ajoutez tous les deux des tests et corrigez les comportements liés à vos fonctionnalités. Akomoses a aussi mis en place les vérifications avant publication ; morepudding a étendu la couverture réseau et survie.",
+      "commits": [
+        {
+          "sha": "bf2f37b",
+          "owner": "akomoses"
+        },
+        {
+          "sha": "4022a1e",
+          "owner": "akomoses"
+        },
+        {
+          "sha": "a2c3534",
+          "owner": "morepudding"
+        }
+      ],
+      "confidence": "supported"
+    },
+    {
+      "id": "performances",
+      "owner": "akomoses",
+      "confidence": "indicative",
+      "reason": "La limitation explicite des effets pour mobile et la gestion des budgets visuels ont été introduites par Akomoses. L’historique contient peu de mesures de performance : cette attribution est indicative et peut être revue après des essais PC et Android.",
+      "commits": [
+        {
+          "sha": "be49429",
+          "owner": "akomoses"
+        },
+        {
+          "sha": "f7537f1",
+          "owner": "akomoses"
+        }
+      ]
+    },
+    {
+      "id": "versions-diffusion",
+      "owner": "both",
+      "reason": "Akomoses a mis en place les exports et les APK Android automatiques. morepudding a ajouté la publication Windows et les permissions nécessaires au jeu en ligne sur Android.",
+      "commits": [
+        {
+          "sha": "e8e4e98",
+          "owner": "akomoses"
+        },
+        {
+          "sha": "bc9bb36",
+          "owner": "akomoses"
+        },
+        {
+          "sha": "f12b82e",
+          "owner": "morepudding"
+        },
+        {
+          "sha": "daead42",
+          "owner": "morepudding"
+        }
+      ],
+      "confidence": "supported"
+    },
+    {
+      "id": "site-discord",
+      "owner": "morepudding",
+      "reason": "Les annonces Discord, les résumés des pushes et le lien avec le site ont été créés par morepudding dans le dépôt du jeu. Le tableau de répartition poursuit ce même domaine.",
+      "commits": [
+        {
+          "sha": "e4cdafe",
+          "owner": "morepudding"
+        },
+        {
+          "sha": "aa2b8b3",
+          "owner": "morepudding"
+        },
+        {
+          "sha": "c05c8bc",
+          "owner": "morepudding"
+        }
+      ],
+      "confidence": "supported"
+    }
+  ]
+}

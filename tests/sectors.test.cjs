@@ -14,11 +14,12 @@ test('catalog covers the existing game without assigning responsibility', () => 
   for (const sector of defaults) assert.equal(Object.hasOwn(sector, 'owner'), false);
 });
 
-test('accepts only the two owners or an unassigned sector and bounded content', () => {
+test('accepts either owner, shared ownership or an unassigned sector and bounded content', () => {
   const body = { title: '  Nouvelle   map  ', description: '', category: 'Gameplay', owner: null };
   assert.equal(validate(body).title, 'Nouvelle map');
   assert.equal(validate({ ...body, owner: 'akomoses' }).owner, 'akomoses');
   assert.equal(validate({ ...body, owner: 'morepudding' }).owner, 'morepudding');
+  assert.equal(validate({ ...body, owner: 'both' }).owner, 'both');
   for (const invalid of [{ owner: 'visitor' }, { owner: undefined }, { title: 'x' }, { title: 'a'.repeat(65) }, { description: 'a'.repeat(221) }, { category: 'unknown' }]) {
     assert.equal(validate({ ...body, ...invalid }), null);
   }
@@ -64,12 +65,15 @@ test('daily report distinguishes ownership from tasks and excludes archived sect
   const sectors = [
     { title: 'Sorts', owner: 'akomoses', archived: false },
     { title: 'Interface', owner: 'morepudding', archived: false },
+    { title: 'IA', owner: 'both', archived: false },
     { title: 'Ancien secteur', owner: 'morepudding', archived: true },
     { title: 'Musique', owner: null, archived: false }
   ];
   const content = summarize(sectors, new Date('2026-09-29T07:07:00Z'));
   assert.match(content, /\*\*Akomoses\*\*\n• Sorts/);
   assert.match(content, /\*\*morepudding\*\*\n• Interface/);
+  assert.match(content, /\*\*En commun — Akomoses et morepudding\*\*\n• IA/);
+  assert.equal(content.match(/• IA/g).length, 1);
   assert.match(content, /À attribuer : 1 secteur/);
   assert.doesNotMatch(content, /Ancien secteur|en cours|Terminé/);
   assert.match(content, /repartition\.html/);
@@ -77,11 +81,27 @@ test('daily report distinguishes ownership from tasks and excludes archived sect
 
 test('empty and large reports remain useful and within Discord message length', () => {
   assert.match(summarize([]), /Aucun secteur attribué/);
-  const sectors = Array.from({ length: 100 }, (_, index) => ({ title: '@everyone*' + 'a'.repeat(54), owner: index % 2 ? 'akomoses' : 'morepudding', archived: false }));
+  const sectors = Array.from({ length: 100 }, (_, index) => ({ title: '@everyone*' + 'a'.repeat(54), owner: ['akomoses', 'morepudding', 'both'][index % 3], archived: false }));
   const content = summarize(sectors);
   assert.ok(content.length <= 2000);
   assert.doesNotMatch(content, /@everyone/);
-  assert.match(content, /40 autres secteurs/);
+  assert.match(content, /26 autres secteurs/);
+});
+
+test('initial proposal assigns every sector and the entire proposal fits in one Discord message', () => {
+  const proposal = require('../dist/data/repartition-proposee.json');
+  assert.equal(proposal.sectors.length, defaults.length);
+  assert.equal(new Set(proposal.sectors.map(sector => sector.id)).size, defaults.length);
+  const sectors = defaults.map(sector => {
+    const suggestion = proposal.sectors.find(item => item.id === sector.id);
+    assert.ok(suggestion?.commits.length);
+    assert.ok(validate({ ...sector, owner: suggestion.owner }));
+    return { ...sector, owner: suggestion.owner, archived: false };
+  });
+  const content = summarize(sectors);
+  for (const sector of sectors) assert.ok(content.includes(`• ${sector.title}`));
+  assert.ok(content.length <= 2000);
+  assert.match(content, /À attribuer : 0 secteur/);
 });
 
 test('daily duplicate key follows Paris midnight across summer and winter time', () => {

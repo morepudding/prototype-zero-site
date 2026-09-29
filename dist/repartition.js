@@ -12,13 +12,14 @@ nav.querySelectorAll('a').forEach(link => link.addEventListener('click', () => {
   nav.classList.remove('open');
 }));
 
-const owners = { akomoses: 'Akomoses', morepudding: 'morepudding' };
+const owners = { akomoses: 'Akomoses', morepudding: 'morepudding', both: 'Les deux' };
 const status = document.getElementById('board-status');
 const unlockDialog = document.getElementById('unlock-dialog');
 const sectorDialog = document.getElementById('sector-dialog');
 const sectorForm = document.getElementById('sector-form');
 const search = document.getElementById('sector-search');
 let board = [], editable = false, ready = false, busy = false, editing = null;
+let proposal = null;
 
 function feedback(message, error = false) {
   status.textContent = message;
@@ -41,7 +42,7 @@ function ownerOptions(select, owner) {
   select.value = owner || '';
 }
 
-function renderCard(sector) {
+function renderCard(sector, listId) {
   const article = document.createElement('article');
   article.className = 'sector-card';
   article.dataset.sector = sector.id;
@@ -49,6 +50,7 @@ function renderCard(sector) {
   header.className = 'sector-card-header';
   const title = document.createElement('div');
   title.append(textElement('span', 'sector-category', sector.category), textElement('h3', '', sector.title));
+  if (sector.owner === 'both') title.append(textElement('span', 'sector-shared', 'En commun'));
   header.append(title);
   if (editable) {
     const edit = textElement('button', 'sector-edit', sector.archived ? 'Restaurer' : 'Modifier');
@@ -60,17 +62,35 @@ function renderCard(sector) {
   }
   article.append(header);
   if (sector.description) article.append(textElement('p', 'sector-card-description', sector.description));
+  const suggestion = proposal?.sectors.find(item => item.id === sector.id);
+  if (suggestion) {
+    const details = document.createElement('details');
+    details.className = 'sector-evidence';
+    details.append(textElement('summary', '', 'Pourquoi cette proposition ?'));
+    details.append(textElement('p', '', `Proposition initiale : ${owners[suggestion.owner]}. ${suggestion.reason}`));
+    const links = document.createElement('p');
+    links.className = 'sector-evidence-links';
+    for (const evidence of suggestion.commits) {
+      const link = textElement('a', '', `${owners[evidence.owner]} · ${evidence.sha}`);
+      link.href = `https://github.com/aKoMoses/PROTOTYPE-V0.1/commit/${evidence.sha}`;
+      link.target = '_blank';
+      link.rel = 'noopener noreferrer';
+      links.append(link);
+    }
+    details.append(links);
+    article.append(details);
+  }
   if (!sector.archived) {
     const control = document.createElement('div');
     control.className = 'sector-owner-control';
-    const label = textElement('label', '', 'Responsable');
+    const label = textElement('label', '', 'Responsable(s)');
     const select = document.createElement('select');
-    select.id = `owner-${sector.id}`;
-    select.setAttribute('aria-label', `Responsable de ${sector.title}`);
+    select.id = `owner-${listId}-${sector.id}`;
+    select.setAttribute('aria-label', `Responsable(s) de ${sector.title}`);
     label.htmlFor = select.id;
     ownerOptions(select, sector.owner);
     select.disabled = !editable || busy;
-    select.addEventListener('change', () => save({ ...sector, owner: select.value || null }, select.value ? `Secteur attribué à ${owners[select.value]}.` : 'Secteur remis dans « À attribuer ».'));
+    select.addEventListener('change', () => save({ ...sector, owner: select.value || null }, select.value === 'both' ? 'Secteur attribué aux deux responsables.' : select.value ? `Secteur attribué à ${owners[select.value]}.` : 'Secteur remis dans « À attribuer ».'));
     control.append(label, select);
     article.append(control);
   }
@@ -86,7 +106,7 @@ function filtered(sectors) {
 function renderList(id, sectors, emptyText) {
   const list = document.getElementById(id);
   const visible = filtered(sectors);
-  list.replaceChildren(...visible.map(renderCard));
+  list.replaceChildren(...visible.map(sector => renderCard(sector, id)));
   if (!visible.length) list.append(textElement('p', 'sector-empty', sectors.length ? 'Aucun secteur ne correspond à cette recherche.' : emptyText));
 }
 
@@ -94,9 +114,10 @@ function render() {
   const active = board.filter(sector => !sector.archived);
   const unassigned = active.filter(sector => !sector.owner);
   const archived = board.filter(sector => sector.archived);
-  for (const owner of Object.keys(owners)) {
-    const sectors = active.filter(sector => sector.owner === owner);
-    document.getElementById(`${owner}-count`).textContent = sectors.length ? `${sectors.length} secteur${sectors.length > 1 ? 's' : ''}` : 'Aucun secteur attribué';
+  for (const owner of ['akomoses', 'morepudding']) {
+    const sectors = active.filter(sector => sector.owner === owner || sector.owner === 'both');
+    const shared = sectors.filter(sector => sector.owner === 'both').length;
+    document.getElementById(`${owner}-count`).textContent = sectors.length ? `${sectors.length} secteur${sectors.length > 1 ? 's' : ''}${shared ? ` · ${shared} en commun` : ''}` : 'Aucun secteur attribué';
     renderList(`${owner}-list`, sectors, 'Choisis un responsable dans la liste « À attribuer » pour remplir cette colonne.');
   }
   renderList('unassigned-list', unassigned, active.length ? 'Tous les secteurs ont trouvé leur responsable.' : 'Ajoute un secteur pour commencer.');
@@ -240,4 +261,13 @@ document.getElementById('archive-sector').addEventListener('click', async () => 
   if (editing && await save({ ...editing, archived: true }, 'Secteur archivé. Tu peux le restaurer en bas de la page.')) sectorDialog.close();
 });
 document.addEventListener('visibilitychange', () => { if (!document.hidden && !sectorDialog.open && !unlockDialog.open) load(); });
+fetch('./data/repartition-proposee.json', { cache: 'no-cache' }).then(response => {
+  if (!response.ok) throw new Error('Proposal unavailable');
+  return response.json();
+}).then(data => {
+  if (!Array.isArray(data.sectors)) return;
+  proposal = data;
+  document.getElementById('proposal-note').textContent = `Première proposition issue des ${data.history.totalCommits} commits du jeu, au ${data.history.dateLabel}. Les secteurs communs apparaissent dans les deux colonnes et restent une seule fiche.`;
+  if (ready) render();
+}).catch(() => {});
 load();

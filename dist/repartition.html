@@ -33,7 +33,7 @@
           <div>
             <p class="sectors-kicker">L’ATELIER DE PROTOTYPE 0</p>
             <h1 id="page-title">À CHACUN<br><em>SON TERRAIN.</em></h1>
-            <p class="sectors-intro-copy">Les grands secteurs du jeu, répartis entre nous deux. Choisis qui s’occupe de quoi ; les responsabilités peuvent évoluer.</p>
+            <p class="sectors-intro-copy">Les grands secteurs du jeu, répartis entre nous deux. Choisis Akomoses, morepudding ou les deux ; les responsabilités peuvent évoluer.</p>
           </div>
           <div class="sectors-intro-side">
             <div class="sectors-art" aria-hidden="true"><img src="./assets/equipment.png" width="1280" height="720" alt=""></div>
@@ -52,6 +52,8 @@
             </div>
           </div>
           <p class="sectors-feedback" id="board-status" role="status" aria-live="polite"></p>
+          <p class="sectors-proposal-note" id="proposal-note">Un secteur commun apparaît dans les deux colonnes. Les attributions restent modifiables.</p>
+          <label class="sector-search board-search" for="sector-search"><span>Rechercher un secteur</span><input id="sector-search" type="search" placeholder="Map, musique, interface…" autocomplete="off"></label>
           <div class="owner-columns">
             <section class="owner-column owner-akomoses" aria-labelledby="akomoses-title">
               <header class="owner-heading"><span class="owner-letter" aria-hidden="true">A</span><div><h2 id="akomoses-title">Akomoses</h2><p id="akomoses-count">Aucun secteur attribué</p></div></header>
@@ -63,7 +65,7 @@
             </section>
           </div>
           <section class="unassigned-section" aria-labelledby="unassigned-title">
-            <header class="unassigned-heading"><div><h2 id="unassigned-title">À attribuer <span id="unassigned-count">—</span></h2><p>Les secteurs disponibles. Tout commence ici.</p></div><label class="sector-search" for="sector-search"><span>Rechercher un secteur</span><input id="sector-search" type="search" placeholder="Map, musique, interface…" autocomplete="off"></label></header>
+            <header class="unassigned-heading"><div><h2 id="unassigned-title">À attribuer <span id="unassigned-count">—</span></h2><p>Les secteurs qui attendent un responsable.</p></div></header>
             <div id="unassigned-list" class="unassigned-list"></div>
           </section>
           <details class="sector-archives" id="sector-archives" hidden><summary>Secteurs archivés <span id="archive-count">0</span></summary><div id="archive-list" class="unassigned-list"></div></details>
@@ -87,7 +89,7 @@
         <div class="sector-dialog-heading"><h2 id="sector-dialog-title">Ajouter un secteur</h2><button class="dialog-close" type="button" data-close aria-label="Fermer">×</button></div>
         <label for="sector-title">Nom du secteur<input id="sector-title" type="text" required minlength="2" maxlength="64" placeholder="Ex. nouvelles maps"></label>
         <label for="sector-description">Ce que ce secteur couvre <span class="optional-label">facultatif</span><textarea id="sector-description" maxlength="220" rows="3" placeholder="Une courte description suffit."></textarea></label>
-        <div class="sector-form-pair"><label for="sector-category">Famille<select id="sector-category"><option>Gameplay</option><option>Modes de jeu</option><option>Présentation</option><option>Technique et suivi</option><option>Autre</option></select></label><label for="sector-owner">Responsable<select id="sector-owner"><option value="">À attribuer</option><option value="akomoses">Akomoses</option><option value="morepudding">morepudding</option></select></label></div>
+        <div class="sector-form-pair"><label for="sector-category">Famille<select id="sector-category"><option>Gameplay</option><option>Modes de jeu</option><option>Présentation</option><option>Technique et suivi</option><option>Autre</option></select></label><label for="sector-owner">Responsable(s)<select id="sector-owner"><option value="">À attribuer</option><option value="akomoses">Akomoses</option><option value="morepudding">morepudding</option><option value="both">Les deux</option></select></label></div>
         <p class="dialog-feedback" id="sector-feedback" role="status" aria-live="polite"></p>
         <div class="dialog-actions"><button class="sector-button secondary" type="button" id="archive-sector" hidden>Archiver</button><button class="sector-button secondary" type="button" data-close>Annuler</button><button class="sector-button" type="submit">Enregistrer</button></div>
       </form>

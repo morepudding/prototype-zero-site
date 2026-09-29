@@ -12,12 +12,14 @@ function summarize(sectors, now = new Date()) {
   const active = sectors.filter(sector => !sector.archived);
   const date = new Intl.DateTimeFormat('fr-FR', { dateStyle: 'long', timeZone: 'Europe/Paris' }).format(now);
   const lines = [`**Répartition des secteurs — ${date}**`, ''];
+  // All twenty starting sectors fit in one message. Bound larger custom boards.
+  const limit = active.filter(sector => sector.owner).length <= 20 ? 20 : 8;
   for (const [id, name] of Object.entries(OWNERS)) {
     const assigned = active.filter(sector => sector.owner === id);
-    lines.push(`**${name}**`);
+    lines.push(`**${id === 'both' ? 'En commun — Akomoses et morepudding' : name}**`);
     if (!assigned.length) lines.push('Aucun secteur attribué.');
     else {
-      const visible = assigned.slice(0, 10);
+      const visible = assigned.slice(0, limit);
       for (const sector of visible) lines.push(`• ${sector.title.replace(/[\r\n*_\x60~|<>@\\]/g, '').slice(0, 64)}`);
       if (assigned.length > visible.length) lines.push(`• Et ${assigned.length - visible.length} autres secteurs sur le site.`);
     }
