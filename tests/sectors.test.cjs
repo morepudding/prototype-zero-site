@@ -50,9 +50,13 @@ test('editing cookie rejects expired, modified and unsigned sessions', () => {
       return { headers: { cookie: `other=value; prototype0_sectors=${payload}.${signatureChange || signature}` } };
     };
     assert.ok(canEdit(request(Date.now() + 10000)));
+    process.env.SECTORS_EDIT_CODE = 'test-code\r\n';
+    assert.ok(canEdit(request(Date.now() + 10000)));
     assert.equal(canEdit(request(Date.now() - 1)), false);
     assert.equal(canEdit(request(Date.now() + 10000, '0'.repeat(64))), false);
     assert.equal(canEdit({ headers: { cookie: 'prototype0_sectors=administrator' } }), false);
+    process.env.SECTORS_EDIT_CODE = '\r\n';
+    assert.equal(canEdit(request(Date.now() + 10000)), false);
     delete process.env.SECTORS_EDIT_CODE;
     assert.equal(canEdit(request(Date.now() + 10000)), false);
   } finally {

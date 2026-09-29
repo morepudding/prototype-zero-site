@@ -1,6 +1,11 @@
 const { createHmac, timingSafeEqual, randomUUID, createHash } = require('node:crypto');
 const { getRedis, readSectors, saveSector, LAST_REPORT_KEY } = require('../lib/sectors.cjs');
 
+function editingCode() {
+  // Deployment tools can append a newline when a value is provided through stdin.
+  return String(process.env.SECTORS_EDIT_CODE || '').trim();
+}
+
 function equal(a, b) {
   const first = Buffer.from(a);
   const second = Buffer.from(b);
@@ -8,11 +13,11 @@ function equal(a, b) {
 }
 
 function signed(value) {
-  return createHmac('sha256', process.env.SECTORS_EDIT_CODE).update(value).digest('hex');
+  return createHmac('sha256', editingCode()).update(value).digest('hex');
 }
 
 function canEdit(request) {
-  if (!process.env.SECTORS_EDIT_CODE) return false;
+  if (!editingCode()) return false;
   const cookie = String(request.headers.cookie || '').split(';').map(value => value.trim())
     .find(value => value.startsWith('prototype0_sectors='))?.slice('prototype0_sectors='.length) || '';
   const match = /^(\d+)\.([a-f0-9-]{36})\.([a-f0-9]{64})$/.exec(cookie);
@@ -42,13 +47,13 @@ module.exports = async function handler(request, response) {
     if (request.method === 'POST') {
       const body = request.body || {};
       if (body.action === 'unlock') {
-        if (!process.env.SECTORS_EDIT_CODE) return response.status(503).json({ error: 'L’accès à l’édition n’est pas encore configuré.' });
+        if (!editingCode()) return response.status(503).json({ error: 'L’accès à l’édition n’est pas encore configuré.' });
         const ip = String(request.headers['x-forwarded-for'] || request.socket?.remoteAddress || 'unknown').split(',')[0].trim();
         const key = `prototype0:sectors:unlock:${createHash('sha256').update(ip).digest('hex')}:${Math.floor(Date.now() / 900000)}`;
         const attempts = await redis.incr(key);
         if (attempts === 1) await redis.expire(key, 900);
         if (attempts > 8) return response.status(429).json({ error: 'Trop d’essais. Réessaie dans 15 minutes.' });
-        if (typeof body.code !== 'string' || body.code.length > 80 || !equal(body.code.trim(), process.env.SECTORS_EDIT_CODE)) {
+        if (typeof body.code !== 'string' || body.code.length > 80 || !equal(body.code.trim(), editingCode())) {
           return response.status(401).json({ error: 'Code incorrect.' });
         }
         const payload = `${Date.now() + 8 * 60 * 60 * 1000}.${randomUUID()}`;
@@ -72,7 +77,7 @@ module.exports = async function handler(request, response) {
       if (result !== 'saved') throw new Error('Unexpected save result');
     }
     return response.status(200).json({
-      sectors: await readSectors(redis), canEdit: canEdit(request), editConfigured: Boolean(process.env.SECTORS_EDIT_CODE),
+      sectors: await readSectors(redis), canEdit: canEdit(request), editConfigured: Boolean(editingCode()),
       notification: { configured: Boolean(process.env.SECTORS_DISCORD_WEBHOOK_URL), lastReport: await redis.get(LAST_REPORT_KEY) || null }
     });
   } catch (error) {
