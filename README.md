@@ -30,6 +30,16 @@ Chaque effet a deux lecteurs A/B et un vote indépendant. Pour les pas, chaque l
 
 Dans `dist/choix.js`, le champ `archived: true` place un effet sonore dans les archives ; les autres apparaissent dans les propositions en cours.
 
+## Répartition des secteurs
+
+`dist/repartition.html` présente les responsabilités habituelles de **Akomoses** et **morepudding**. Les 20 secteurs recensés dans le jeu sont initialisés sans responsable dans « À attribuer ». L’édition permet de créer, renommer, décrire, attribuer, désattribuer et archiver/restaurer les secteurs. Les archives sont réversibles. Cette première version ne contient ni tâches ni dépendances ; une responsabilité n’est pas présentée comme un travail en cours.
+
+`api/sectors.js` stocke les secteurs dans un hash Redis distinct des votes et des pushes. L’initialisation est atomique et ne remplace jamais une répartition existante. Chaque modification vérifie la version de la fiche pour éviter d’écraser une modification concurrente. La recherche porte sur tous les secteurs visibles. Les modifications nécessitent `SECTORS_EDIT_CODE`, un code partagé conservé uniquement côté serveur ; le déverrouillage crée une session signée de 8 heures dans un cookie HttpOnly. Le code n’est pas conservé dans le navigateur. Les tentatives sont limitées à huit par quart d’heure et par adresse IP. Sans code configuré, le tableau reste en lecture seule.
+
+`api/notify-sectors.js` publie la répartition dans le salon associé à `SECTORS_DISCORD_WEBHOOK_URL`. Le workflow `daily-sectors.yml` passe à **9 h 07, Europe/Paris**, puis à 9 h 37 pour reprendre un éventuel échec. Redis limite l’envoi à un récapitulatif par date parisienne. Le message est publié même si la répartition n’a pas changé et comprend les deux responsables et le nombre de secteurs non attribués. Les archives sont exclues. Il utilise le `NOTIFICATION_CRON_SECRET` existant. GitHub peut retarder les exécutions et désactive les workflows planifiés d’un dépôt public après 60 jours sans activité ; vérifier les exécutions dans Actions si le projet reste longtemps inactif. Une interruption après la confirmation Discord et avant l’enregistrement Redis peut exceptionnellement produire un doublon.
+
+Les tests se lancent avec `npm test`.
+
 ## Voir le site en local
 
 Depuis la racine du dépôt :

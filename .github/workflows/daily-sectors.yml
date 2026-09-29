@@ -1,0 +1,31 @@
+name: Daily sector report
+
+on:
+  schedule:
+    - cron: '7,37 9 * * *'
+      timezone: Europe/Paris
+  workflow_dispatch:
+
+permissions: {}
+
+concurrency:
+  group: daily-sector-report
+  cancel-in-progress: false
+
+jobs:
+  report:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - name: Send the daily responsibility report
+        env:
+          NOTIFICATION_CRON_SECRET: ${{ secrets.NOTIFICATION_CRON_SECRET }}
+        run: |
+          if [ -z "$NOTIFICATION_CRON_SECRET" ]; then
+            echo "Notification secret is not configured" >&2
+            exit 1
+          fi
+          curl --fail-with-body --silent --show-error --max-time 40 \
+            --retry 2 --retry-delay 10 --retry-all-errors --request POST \
+            --header "Authorization: Bearer $NOTIFICATION_CRON_SECRET" \
+            https://prototype-zero-site.vercel.app/api/notify-sectors

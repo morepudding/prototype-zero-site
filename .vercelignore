@@ -1,0 +1,7 @@
+.git/
+.github/
+.env*
+.sites-runtime/
+node_modules/
+tests/
+*.tar.gz

@@ -1,0 +1,22 @@
+[
+  {"id":"conception-equilibrage","title":"Conception et équilibrage","category":"Gameplay","description":"Règles, rythme des parties, statistiques et difficulté générale."},
+  {"id":"armes-combat","title":"Armes et combat","category":"Gameplay","description":"Blaster, Shotgun, tirs, dégâts, collisions et sensations de combat."},
+  {"id":"sorts-modules","title":"Sorts et modules","category":"Gameplay","description":"Nouvelles compétences, modules offensifs, défensifs, de mobilité et passifs."},
+  {"id":"map-level-design","title":"Map et level design","category":"Gameplay","description":"Arène, couverts, obstacles, buissons, passages et placement des réparations."},
+  {"id":"intelligence-artificielle","title":"Intelligence artificielle","category":"Gameplay","description":"Déplacements, ciblage, tactiques et comportement des bots et des ennemis."},
+  {"id":"mode-survie","title":"Mode survie","category":"Modes de jeu","description":"Vagues, boss, récompenses, évolutions, synergies et progression d’une partie."},
+  {"id":"duel-manches","title":"Duel et manches","category":"Modes de jeu","description":"Décompte, score, enchaînement des manches, victoire et revanche."},
+  {"id":"multijoueur","title":"Multijoueur","category":"Modes de jeu","description":"Salons en ligne, connexion, synchronisation du combat et déconnexions."},
+  {"id":"entrainement","title":"Terrain d’entraînement","category":"Modes de jeu","description":"Mannequins, bots d’essai, mesure des dégâts et outils pour tester les builds."},
+  {"id":"interface-menus","title":"Interface et menus","category":"Présentation","description":"HUD, forge, équipement, menus, réglages et lisibilité des informations."},
+  {"id":"controles-camera","title":"Contrôles, caméra et confort","category":"Présentation","description":"Clavier, souris, joysticks tactiles, caméra et options de confort."},
+  {"id":"direction-artistique","title":"Direction artistique et décors","category":"Présentation","description":"Identité visuelle, ambiance industrielle, décors, matériaux et icônes."},
+  {"id":"robots-animations","title":"Robots et animations","category":"Présentation","description":"Châssis, modèles des robots, locomotion, visée et animations des actions."},
+  {"id":"effets-visuels","title":"Effets visuels","category":"Présentation","description":"Projectiles, impacts, états, explosions et retours visuels du combat."},
+  {"id":"effets-sonores","title":"Effets sonores","category":"Présentation","description":"Tirs, pas, impacts, alertes, sons des compétences et mixage des bruitages."},
+  {"id":"musique","title":"Musique","category":"Présentation","description":"Pistes du menu, du duel et de la survie, boucles, niveaux et transitions."},
+  {"id":"tests-corrections","title":"Tests et corrections","category":"Technique et suivi","description":"Essais en jeu, régressions, bugs et vérification des nouvelles versions."},
+  {"id":"performances","title":"Performances et compatibilité","category":"Technique et suivi","description":"Fluidité, budget des effets, rendu mobile et comportement sur les appareils."},
+  {"id":"versions-diffusion","title":"Versions PC et Android","category":"Technique et suivi","description":"Exports Windows, APK Android, installation, versions et diffusion du jeu."},
+  {"id":"site-discord","title":"Site et Discord","category":"Technique et suivi","description":"Vitrine, choix des assets, suivi des pushes, répartition et annonces Discord."}
+]

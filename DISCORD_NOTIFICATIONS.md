@@ -1,5 +1,11 @@
 # Notifications Discord
 
+## Répartition du travail
+
+Le salon `#repartition-du-travail` de Studio JV reçoit les secteurs attribués à **Akomoses** et **morepudding**, puis le nombre de secteurs encore à attribuer. Il utilise un webhook séparé (`SECTORS_DISCORD_WEBHOOK_URL` sur Vercel) et le secret de notification existant. Le workflow `daily-sectors.yml` passe chaque jour à 9 h 07 puis 9 h 37, heure de Paris ; le second passage ne publie rien si le premier a réussi. Un verrou protège les envois simultanés, et la dernière date d’envoi est enregistrée dans Redis. La page affiche le dernier envoi confirmé. Le workflow peut être lancé manuellement pour vérifier la livraison, une fois par date parisienne. Les secteurs sont des responsabilités, pas des tâches actives.
+
+## Annonces existantes
+
 Le salon Discord reçoit trois types d'annonces : les pushes sur `main` du dépôt du jeu, les nouveaux fichiers de vote du site et un récapitulatif des votes toutes les 30 minutes s'il y a des changements.
 
 ## Configuration

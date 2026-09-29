@@ -9,6 +9,9 @@
   },
   "license": "UNLICENSED",
   "type": "commonjs",
+  "scripts": {
+    "test": "node --test tests/*.test.cjs"
+  },
   "bugs": {
     "url": "https://github.com/morepudding/prototype-zero-site/issues"
   },
