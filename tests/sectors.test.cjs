@@ -65,7 +65,7 @@ test('editing cookie rejects expired, modified and unsigned sessions', () => {
   }
 });
 
-test('daily report distinguishes ownership from tasks and excludes archived sectors', () => {
+test('daily report keeps responsibility counts separate from yesterday work and excludes archived sectors', () => {
   const sectors = [
     { title: 'Sorts', owner: 'akomoses', archived: false },
     { title: 'Interface', owner: 'morepudding', archived: false },
@@ -74,22 +74,19 @@ test('daily report distinguishes ownership from tasks and excludes archived sect
     { title: 'Musique', owner: null, archived: false }
   ];
   const content = summarize(sectors, new Date('2026-09-29T07:07:00Z'));
-  assert.match(content, /\*\*Akomoses\*\*\n• Sorts/);
-  assert.match(content, /\*\*morepudding\*\*\n• Interface/);
-  assert.match(content, /\*\*En commun — Akomoses et morepudding\*\*\n• IA/);
-  assert.equal(content.match(/• IA/g).length, 1);
-  assert.match(content, /À attribuer : 1 secteur/);
-  assert.doesNotMatch(content, /Ancien secteur|en cours|Terminé/);
+  assert.match(content, /Responsabilités : Akomoses 2 · morepudding 2 · 1 en commun · 1 à attribuer/);
+  assert.match(content, /Aucun travail déclaré comme terminé ou publié hier/);
+  assert.doesNotMatch(content, /Ancien secteur|• Sorts|• Interface/);
   assert.match(content, /repartition\.html/);
 });
 
 test('empty and large reports remain useful and within Discord message length', () => {
-  assert.match(summarize([]), /Aucun secteur attribué/);
+  assert.match(summarize([]), /Aucun travail déclaré comme terminé ou publié hier/);
   const sectors = Array.from({ length: 100 }, (_, index) => ({ title: '@everyone*' + 'a'.repeat(54), owner: ['akomoses', 'morepudding', 'both'][index % 3], archived: false }));
   const content = summarize(sectors);
   assert.ok(content.length <= 2000);
   assert.doesNotMatch(content, /@everyone/);
-  assert.match(content, /26 autres secteurs/);
+  assert.match(content, /33 en commun/);
 });
 
 test('initial proposal assigns every sector and the entire proposal fits in one Discord message', () => {
@@ -103,9 +100,9 @@ test('initial proposal assigns every sector and the entire proposal fits in one 
     return { ...sector, owner: suggestion.owner, archived: false };
   });
   const content = summarize(sectors);
-  for (const sector of sectors) assert.ok(content.includes(`• ${sector.title}`));
+  assert.match(content, /Akomoses 16 · morepudding 14 · 10 en commun/);
   assert.ok(content.length <= 2000);
-  assert.match(content, /À attribuer : 0 secteur/);
+  assert.doesNotMatch(content, /à attribuer/);
 });
 
 test('daily duplicate key follows Paris midnight across summer and winter time', () => {

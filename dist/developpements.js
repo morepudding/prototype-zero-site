@@ -1,10 +1,16 @@
 (() => {
   const labels = { active: 'En cours', local: 'Terminé localement · à publier', interrupted: 'Interrompu · à reprendre', published: 'Publié' };
-  let sectorNames = new Map(), loading = false;
+  let sectorNames = new Map(), loading = false, fullHistory = false, lastHistory = [];
+  function renderHistory() {
+    const visible = fullHistory ? lastHistory : lastHistory.slice(0, 12);
+    document.getElementById('work-history').replaceChildren(...(visible.length ? visible.map(card) : [node('p', 'Les publications liées à un développement apparaîtront ici.', 'sector-empty')]));
+    document.getElementById('more-work-history').hidden = fullHistory || lastHistory.length <= 12;
+  }
   const node = (tag, value, className) => { const el = document.createElement(tag); el.textContent = value; if (className) el.className = className; return el; };
   function card(work) {
     const el = node('article', '', `sector-card work-card work-${work.status}`);
     el.append(node('p', labels[work.status] || work.status, 'work-status'), node('h4', work.title, 'sector-title'));
+    if (work.summary && work.summary !== work.title) el.append(node('p', work.summary, 'sector-description'));
     el.append(node('p', work.sectors.map(id => sectorNames.get(id) || id).join(' · '), 'sector-description'));
     const time = new Intl.DateTimeFormat('fr-FR', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }).format(new Date(work.updatedAt));
     el.append(node('p', `${work.actor === 'akomoses' ? 'Akomoses' : 'morepudding'} · ${time}`, 'work-meta'));
@@ -30,14 +36,15 @@
         const current = developments.filter(work => work.actor === actor && work.status !== 'published');
         list.replaceChildren(...(current.length ? current.map(card) : [node('p', 'Aucun développement déclaré.', 'sector-empty')]));
       }
-      const history = developments.filter(work => work.status === 'published').slice(0, 12);
-      document.getElementById('work-history').replaceChildren(...(history.length ? history.map(card) : [node('p', 'Les publications liées à un développement apparaîtront ici.', 'sector-empty')]));
+      lastHistory = developments.filter(work => work.status === 'published');
+      renderHistory();
       const active = developments.filter(work => work.status === 'active').length;
       status.textContent = `${active} modification${active > 1 ? 's' : ''} en cours · les responsabilités habituelles sont ci-dessous.`;
     } catch { status.textContent = 'Le tableau des développements est momentanément indisponible. Actualise avant de commencer une modification.'; }
     finally { loading = false; }
   }
   document.getElementById('refresh-developments').addEventListener('click', load);
+  document.getElementById('more-work-history').addEventListener('click', () => { fullHistory = true; renderHistory(); });
   document.addEventListener('visibilitychange', () => { if (!document.hidden) load(); });
   setInterval(() => { if (!document.hidden) load(); }, 30000);
   load();

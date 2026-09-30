@@ -63,7 +63,9 @@ test('real Redis: races, same-session retries, stale fencing, local work and pub
     assert.notEqual(replacement.record.id, winner.id);
     assert.equal((await mutate(redis, winner.actor, { ...auth, action: 'finish' }, [], now + LEASE_MS + 400, key)).error, 'expired');
     const next = replacement.record;
-    await mutate(redis, next.actor, { action: 'finish', id: next.id, leaseToken: next.leaseToken, session: next.session }, [], now + LEASE_MS + 500, key);
+    const finished = await mutate(redis, next.actor, { action: 'finish', id: next.id, leaseToken: next.leaseToken, session: next.session, summary: 'Les bots contournent les couverts. Le comportement a été vérifié. Cette troisième phrase sera supprimée.' }, [], now + LEASE_MS + 500, key);
+    assert.equal(finished.record.completedAt, now + LEASE_MS + 500);
+    assert.equal(finished.record.summary, 'Les bots contournent les couverts. Le comportement a été vérifié.');
     assert.equal((await mutate(redis, next.actor, { action: 'check', id: next.id, leaseToken: next.leaseToken, session: next.session }, [], now + 2 * LEASE_MS, key)).record.status, 'local');
     assert.equal((await mutate(redis, next.actor, { action: 'heartbeat', id: next.id, leaseToken: next.leaseToken, session: next.session }, [], now + 2 * LEASE_MS, key)).error, 'expired');
     assert.equal((await mutate(redis, 'akomoses', body('session-delta'), defaults, now + 2 * LEASE_MS, key)).error, 'duplicate');
@@ -71,6 +73,10 @@ test('real Redis: races, same-session retries, stale fencing, local work and pub
     const publicList = await listDevelopments(redis, now + 2 * LEASE_MS + 2, key);
     assert.equal(publicList.find(r => r.id === next.id).status, 'published');
     assert.equal(publicList.find(r => r.id === next.id).commit, 'a'.repeat(40));
+    assert.equal(publicList.find(r => r.id === next.id).completedAt, now + LEASE_MS + 500);
+    assert.equal(publicList.find(r => r.id === next.id).publishedAt, now + 2 * LEASE_MS + 1);
+    await confirmPublished(redis, [{ id: next.id, commit: 'a'.repeat(40) }], now + 3 * LEASE_MS, key);
+    assert.equal((await listDevelopments(redis, now + 3 * LEASE_MS, key)).find(r => r.id === next.id).publishedAt, now + 2 * LEASE_MS + 1);
     assert.ok(publicList.every(r => !r.leaseToken && !r.session));
     assert.ok((await mutate(redis, 'akomoses', body('session-delta'), defaults, now + 2 * LEASE_MS + 3, key)).record);
   } finally { await redis.del(key); }

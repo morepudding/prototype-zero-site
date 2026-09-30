@@ -1,34 +1,9 @@
 const { randomUUID, timingSafeEqual } = require('node:crypto');
-const { getRedis, readSectors, OWNERS, LAST_REPORT_KEY } = require('../lib/sectors.cjs');
+const { getRedis, readSectors, LAST_REPORT_KEY } = require('../lib/sectors.cjs');
+const { listDevelopments } = require('../lib/developments.cjs');
+const { parisDay, previousDay, summarize } = require('../lib/daily-report.cjs');
 
 const LOCK_KEY = 'prototype0:sectors:report-lock';
-const PAGE_URL = 'https://prototype-zero-site.vercel.app/repartition.html';
-
-function parisDay(now) {
-  return new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/Paris', year: 'numeric', month: '2-digit', day: '2-digit' }).format(now);
-}
-
-function summarize(sectors, now = new Date()) {
-  const active = sectors.filter(sector => !sector.archived);
-  const date = new Intl.DateTimeFormat('fr-FR', { dateStyle: 'long', timeZone: 'Europe/Paris' }).format(now);
-  const lines = [`**Répartition des secteurs — ${date}**`, ''];
-  // All twenty starting sectors fit in one message. Bound larger custom boards.
-  const limit = active.filter(sector => sector.owner).length <= 20 ? 20 : 8;
-  for (const [id, name] of Object.entries(OWNERS)) {
-    const assigned = active.filter(sector => sector.owner === id);
-    lines.push(`**${id === 'both' ? 'En commun — Akomoses et morepudding' : name}**`);
-    if (!assigned.length) lines.push('Aucun secteur attribué.');
-    else {
-      const visible = assigned.slice(0, limit);
-      for (const sector of visible) lines.push(`• ${sector.title.replace(/[\r\n*_\x60~|<>@\\]/g, '').slice(0, 64)}`);
-      if (assigned.length > visible.length) lines.push(`• Et ${assigned.length - visible.length} autres secteurs sur le site.`);
-    }
-    lines.push('');
-  }
-  const unassigned = active.filter(sector => !sector.owner).length;
-  lines.push(`**À attribuer : ${unassigned} secteur${unassigned > 1 ? 's' : ''}.**`, PAGE_URL);
-  return lines.join('\n');
-}
 
 function authorized(request) {
   const secret = process.env.NOTIFICATION_CRON_SECRET;
@@ -48,7 +23,9 @@ module.exports = async function handler(request, response) {
     redis = getRedis();
     const now = new Date();
     const sectors = await readSectors(redis);
-    if (request.body?.preview === true) return response.status(200).json({ content: summarize(sectors, now) });
+    const developments = await listDevelopments(redis);
+    const content = summarize(sectors, now, developments);
+    if (request.body?.preview === true) return response.status(200).json({ content, workDay: previousDay(now) });
     if (!process.env.SECTORS_DISCORD_WEBHOOK_URL) return response.status(503).json({ error: 'Salon de répartition non configuré.' });
     const day = parisDay(now);
     const lock = await redis.set(LOCK_KEY, lockId, { nx: true, ex: 180 });
@@ -60,11 +37,11 @@ module.exports = async function handler(request, response) {
     url.searchParams.set('wait', 'true');
     const sent = await fetch(url, {
       method: 'POST', headers: { 'Content-Type': 'application/json' }, signal: AbortSignal.timeout(20000),
-      body: JSON.stringify({ content: summarize(sectors, now), username: 'Spidey Bot', allowed_mentions: { parse: [] } })
+      body: JSON.stringify({ content, username: 'Spidey Bot', allowed_mentions: { parse: [] } })
     });
     if (!sent.ok) throw new Error('Discord delivery failed');
     const message = await sent.json();
-    await redis.set(LAST_REPORT_KEY, { day, sentAt: now.toISOString(), messageId: message.id });
+    await redis.set(LAST_REPORT_KEY, { day, workDay: previousDay(now), sentAt: now.toISOString(), messageId: message.id });
     return response.status(200).json({ sent: true, day });
   } catch (error) {
     console.error('Sector report failed:', error.name);
