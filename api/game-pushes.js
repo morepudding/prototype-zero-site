@@ -40,7 +40,8 @@ function validPush(push) {
     typeof push.source === 'string' && push.source.startsWith('https://github.com/aKoMoses/PROTOTYPE-V0.1/') &&
     /^\d{4}-\d{2}-\d{2}$/.test(push.date) &&
     (push.workReferences === undefined || (Array.isArray(push.workReferences) && push.workReferences.length <= 100 &&
-      push.workReferences.every(ref => ref && /^[a-f0-9-]{36}$/.test(ref.id) && COMMIT_PATTERN.test(ref.commit))));
+      push.workReferences.every(ref => ref && /^[a-f0-9-]{36}$/.test(ref.id) && COMMIT_PATTERN.test(ref.commit) &&
+        (ref.resumedAt === undefined || (Number.isSafeInteger(ref.resumedAt) && ref.resumedAt > 0)))));
 }
 
 async function handler(request, response) {
@@ -73,3 +74,4 @@ async function handler(request, response) {
 
 module.exports = handler;
 module.exports.listPushes = listPushes;
+module.exports.validPush = validPush;
