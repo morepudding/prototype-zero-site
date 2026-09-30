@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="./repartition.css">
     <link rel="stylesheet" href="./navigation.css">
     <script defer src="./repartition.js"></script>
+    <script defer src="./developpements.js"></script>
   </head>
   <body class="sectors-page">
     <a class="skip-link" href="#main">Aller au contenu</a>
@@ -41,6 +42,20 @@
           </div>
         </section>
 
+        <section class="sectors-workspace wrap developments-workspace" id="developpements" aria-labelledby="developments-title">
+          <div class="sectors-toolbar">
+            <div><p class="sectors-kicker">EN CE MOMENT</p><h2 id="developments-title">Qui travaille sur quoi ?</h2></div>
+            <button class="sector-button secondary" id="refresh-developments" type="button">Actualiser <span aria-hidden="true">↻</span></button>
+          </div>
+          <p class="sectors-footer-note">Codex annonce une modification avant de commencer. Un secteur commun peut accueillir plusieurs travaux différents.</p>
+          <p class="sectors-feedback" id="developments-status" role="status" aria-live="polite">Chargement des développements…</p>
+          <div class="owner-columns">
+            <section class="owner-column owner-akomoses" aria-labelledby="work-akomoses-title"><header class="owner-heading"><span class="owner-letter" aria-hidden="true">A</span><div><h3 id="work-akomoses-title">Akomoses</h3></div></header><div class="owner-list" id="work-akomoses"></div></section>
+            <section class="owner-column owner-morepudding" aria-labelledby="work-morepudding-title"><header class="owner-heading"><span class="owner-letter" aria-hidden="true">m</span><div><h3 id="work-morepudding-title">morepudding</h3></div></header><div class="owner-list" id="work-morepudding"></div></section>
+          </div>
+          <details class="sector-archives"><summary>Dernières modifications publiées</summary><div id="work-history" class="unassigned-list"></div></details>
+          <p class="sectors-footer-note"><a href="https://github.com/aKoMoses/PROTOTYPE-V0.1/blob/main/docs/coordination-codex.md" target="_blank" rel="noopener noreferrer">Activer la coordination sur mon ordinateur ↗</a> · Mise à jour automatique toutes les 30 secondes.</p>
+        </section>
         <section class="sectors-workspace wrap" aria-label="Répartition des secteurs">
           <div class="sectors-toolbar">
             <p id="board-overview">Chargement de la répartition…</p>

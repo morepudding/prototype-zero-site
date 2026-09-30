@@ -1,5 +1,6 @@
 const { Redis } = require('@upstash/redis');
 const { timingSafeEqual } = require('node:crypto');
+const { confirmPublished } = require('../lib/developments.cjs');
 const { pushes: publishedPushes } = require('../dist/data/patchs.json');
 
 const LIST_KEY = 'prototype0:game-pushes:list';
@@ -37,7 +38,9 @@ function validPush(push) {
     Array.isArray(push.changes) && push.changes.length <= 10 &&
     push.changes.every(change => typeof change === 'string' && change.length <= 160) &&
     typeof push.source === 'string' && push.source.startsWith('https://github.com/aKoMoses/PROTOTYPE-V0.1/') &&
-    /^\d{4}-\d{2}-\d{2}$/.test(push.date);
+    /^\d{4}-\d{2}-\d{2}$/.test(push.date) &&
+    (push.workReferences === undefined || (Array.isArray(push.workReferences) && push.workReferences.length <= 100 &&
+      push.workReferences.every(ref => ref && /^[a-f0-9-]{36}$/.test(ref.id) && COMMIT_PATTERN.test(ref.commit))));
 }
 
 async function handler(request, response) {
@@ -58,6 +61,9 @@ async function handler(request, response) {
       'if redis.call("EXISTS", KEYS[1]) == 1 then return 0 end redis.call("SET", KEYS[1], ARGV[1]) redis.call("LPUSH", KEYS[2], ARGV[2]) redis.call("LTRIM", KEYS[2], 0, 99) return 1',
       [RECORD_KEY + record.commit, LIST_KEY], [JSON.stringify(record), record.commit]
     );
+    // This endpoint is authenticated only by the GitHub main-push workflow secret.
+    // Always retry confirmation, even when a previous request saved the push already.
+    await confirmPublished(redis, push.workReferences || []);
     return response.status(200).json({ created: created === 1, commit: record.commit });
   } catch (error) {
     console.error('Game push storage failed:', error);
