@@ -5,6 +5,7 @@ const CHOICE_KEY = 'prototype0:blaster:choice:';
 const VOTE_EVENTS_KEY = 'prototype0:discord:vote-events';
 const VALID_STYLES = new Set(['01', '02', '03', '04', '05']);
 const VALID_SOUNDS = new Set(['impulsion', 'plasma', 'charge']);
+const VALID_FORGE_LAYOUTS = new Set(['1', '4', '5']);
 const EQUIPMENT = new Set(['shotgun', 'modulo_drone', 'javelin', 'magnetic_field', 'static_shield', 'pyro_boots', 'bio_injector', 'baroud', 'omnivamp']);
 const GAME_SFX = new Set(['drone-launch', 'pyro-dash', 'javelin-teleport', 'magnetic-absorb', 'robot-destruction', 'impact-robot', 'impact-decor', 'impact-critique', 'degats-recus', 'robot-footsteps', 'bush-entry', 'bush-exit', 'bush-movement', 'enemy-shot', 'enemy-melee', 'enemy-charge-warning', 'low-health', 'baroud-activation']);
 const VARIANTS = new Set(['a', 'b']);
@@ -29,6 +30,7 @@ async function listChoices(redis) {
       name: record.name,
       style: VALID_STYLES.has(record.style) ? record.style : null,
       sound: VALID_SOUNDS.has(record.sound) ? record.sound : null,
+      forge: VALID_FORGE_LAYOUTS.has(record.forge) ? record.forge : null,
       icons: Object.fromEntries([...EQUIPMENT].map(item => [item, VARIANTS.has(record[`icon:${item}`]) ? record[`icon:${item}`] : null])),
       gameSfx: Object.fromEntries([...GAME_SFX].map(item => [item, VARIANTS.has(record[`game-sfx:${item}`]) ? record[`game-sfx:${item}`] : null])),
       updatedAt: record.updatedAt || null
@@ -53,9 +55,10 @@ module.exports = async function handler(request, response) {
       const value = body.value;
       const item = body.item;
       if (!ID_PATTERN.test(id) || name.length < 1 || name.length > 24 ||
-          !['style', 'sound', 'icon', 'game-sfx'].includes(kind) ||
+          !['style', 'sound', 'icon', 'game-sfx', 'forge'].includes(kind) ||
           (kind === 'style' && !VALID_STYLES.has(value)) ||
           (kind === 'sound' && !VALID_SOUNDS.has(value)) ||
+          (kind === 'forge' && !VALID_FORGE_LAYOUTS.has(value)) ||
           (kind === 'icon' && (!EQUIPMENT.has(item) || !VARIANTS.has(value))) ||
           (kind === 'game-sfx' && (!GAME_SFX.has(item) || !VARIANTS.has(value)))) {
         return response.status(400).json({ error: 'Choix invalide.' });

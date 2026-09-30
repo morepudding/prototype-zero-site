@@ -1,0 +1,33 @@
+.forge-section { border-bottom: 1px solid var(--line); padding-top: 60px; }
+.forge-section > .wrap { max-width: 1120px; }
+.forge-heading { margin-bottom: 32px; }
+.forge-options { display: grid; gap: 32px; padding: 0; margin: 30px 0 0; border: 0; min-width: 0; }
+.forge-option { overflow: hidden; border: 1px solid var(--line); background: #211a16; scroll-margin-top: 100px; }
+.forge-option:has(input:checked) { border-color: var(--orange); box-shadow: 0 0 0 1px var(--orange); }
+.forge-option:has(input:focus-visible) { outline: 2px solid var(--cyan); outline-offset: 4px; }
+.forge-preview-link { display: block; position: relative; background: #171310; }
+.forge-preview-link img { width: 100%; height: auto; aspect-ratio: 1672 / 941; }
+.forge-preview-link > span { position: absolute; right: 16px; bottom: 16px; padding: 9px 13px; background: rgba(18,16,14,.9); color: var(--cream); border: 1px solid rgba(242,234,219,.35); font: 800 11px/1.3 var(--body); letter-spacing: .07em; }
+.forge-preview-link:hover > span { background: var(--orange); color: var(--ink); }
+.forge-option-label { display: flex; align-items: center; gap: 18px; padding: 22px 24px; cursor: pointer; }
+.forge-option-label input { width: 22px; height: 22px; margin: 0; flex: 0 0 auto; accent-color: var(--orange); }
+.forge-option-number { font: 800 42px/1 var(--display); color: var(--orange-light); }
+.forge-option-copy { display: flex; flex-direction: column; gap: 5px; flex: 1; min-width: 0; }
+.forge-option-copy strong { font: 800 clamp(22px,2.5vw,31px)/1.1 var(--display); }
+.forge-option-copy > span { font-size: 14px; color: #c5b9ae; }
+.forge-option-pick { color: var(--orange-light); font: 800 11px/1.4 var(--body); letter-spacing: .07em; white-space: nowrap; }
+.forge-option:has(input:checked) .forge-option-pick { color: var(--cyan); }
+.forge-preview-dialog { width: min(96vw,1800px); max-width: 96vw; max-height: 96dvh; padding: 0; border: 1px solid var(--line); background: var(--ink); color: var(--cream); }
+.forge-preview-dialog::backdrop { background: rgba(0,0,0,.86); }
+.forge-preview-bar { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 14px 18px; }
+.forge-preview-bar strong { font: 700 22px/1.2 var(--display); }
+.forge-preview-bar button { border: 1px solid var(--orange); background: transparent; color: var(--orange-light); padding: 12px; cursor: pointer; font: 800 11px/1 var(--body); }
+.forge-preview-dialog > img { width: 100%; max-height: calc(96dvh - 66px); object-fit: contain; }
+@media (max-width: 760px) {
+  .forge-option-label { padding: 16px; gap: 12px; flex-wrap: wrap; }
+  .forge-option-copy { flex-basis: calc(100% - 90px); }
+  .forge-option-pick { margin-left: 72px; }
+  .forge-preview-link > span { bottom: 10px; right: 10px; font-size: 10px; }
+  .forge-preview-bar { padding: 12px; }
+  .forge-preview-bar strong { font-size: 19px; }
+}

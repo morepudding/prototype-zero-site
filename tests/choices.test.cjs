@@ -4,7 +4,7 @@ const fs = require('node:fs');
 const vm = require('node:vm');
 const path = require('node:path');
 
-test('saves independent A/B game sounds without changing existing votes', async () => {
+test('saves independent sound and forge choices without changing existing votes', async () => {
   const id = '12345678-1234-4123-8123-123456789abc';
   const records = new Map([[`prototype0:blaster:choice:${id}`, {
     name: 'Ben', sound: 'plasma', 'icon:shotgun': 'a', updatedAt: '2026-09-28T00:00:00.000Z'
@@ -81,6 +81,28 @@ test('saves independent A/B game sounds without changing existing votes', async 
   assert.equal(nextUpdate.body.choices[0].gameSfx['pyro-dash'], 'b');
   assert.equal(nextUpdate.body.choices[0].sound, 'plasma');
   assert.equal(nextUpdate.body.choices[0].icons.shotgun, 'a');
+
+  for (const value of ['1', '4', '5']) {
+    const forge = respond();
+    await handler(request({id, name: 'Ben', kind: 'forge', value}), forge);
+    assert.equal(forge.code, 200);
+    assert.equal(forge.body.choices.length, 1);
+    assert.equal(forge.body.choices[0].forge, value);
+    assert.equal(forge.body.choices[0].sound, 'plasma');
+    assert.equal(forge.body.choices[0].icons.shotgun, 'a');
+    assert.equal(forge.body.choices[0].gameSfx['bush-entry'], 'a');
+    assert.equal(forge.body.choices[0].gameSfx['drone-launch'], 'a');
+  }
+  for (const value of ['2', '3', '6', 'a', 1]) {
+    const rejected = respond();
+    await handler(request({id, name: 'Ben', kind: 'forge', value}), rejected);
+    assert.equal(rejected.code, 400);
+    assert.equal(records.get(`prototype0:blaster:choice:${id}`).forge, '5');
+  }
+  const iconUpdate = respond();
+  await handler(request({id, name: 'Ben', kind: 'icon', item: 'shotgun', value: 'b'}), iconUpdate);
+  assert.equal(iconUpdate.code, 200);
+  assert.equal(iconUpdate.body.choices[0].forge, '5');
 
   const invalid = respond();
   await handler(request({id, name: 'Ben', kind: 'game-sfx', item: 'shotgun', value: 'a'}), invalid);

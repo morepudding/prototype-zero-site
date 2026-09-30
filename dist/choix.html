@@ -4,13 +4,14 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#12100e">
-    <meta name="description" content="Écoute les sons du jeu et vote entre les versions A et B de chaque action de Prototype 0.">
+    <meta name="description" content="Compare les propositions 1, 4 et 5 pour la nouvelle forge de Prototype 0, puis enregistre ton choix. Les votes sur les sons restent ouverts.">
     <title>Nouveaux choix et archives — Prototype 0</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800;900&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="./styles.css">
     <link rel="stylesheet" href="./navigation.css">
+    <link rel="stylesheet" href="./forge-choices.css">
     <script defer src="./choix.js"></script>
   </head>
   <body class="choices-page">
@@ -25,7 +26,8 @@
         <nav class="main-nav" id="main-nav" aria-label="Navigation principale">
           <a href="./index.html">La vitrine</a>
           <a href="./patchs.html">Pushes du jeu</a>
-          <a href="#sons-jeu">Nouveaux choix</a>
+          <a href="#forge">Nouvelle forge</a>
+          <a href="#sons-jeu">Sons du jeu</a>
           <a href="#archives">Archives</a>
           <a href="./repartition.html">Répartition</a>
           <a class="nav-github" href="https://github.com/aKoMoses/PROTOTYPE-V0.1" target="_blank" rel="noopener noreferrer">Voir le GitHub <span aria-hidden="true">↗</span></a>
@@ -37,9 +39,68 @@
           <div class="wrap">
             <p class="section-index"><span>ATELIER</span> / PROPOSITIONS EN COURS</p>
             <h1>LES NOUVEAUX<br><em>CHOIX DU JEU.</em></h1>
-            <p>Pas du robot, buissons, attaques ennemies et alertes : compare les nouveaux sons et choisis A ou B pour chacun. Les anciennes propositions sont dans les archives.</p>
-            <div class="choices-hero-facts"><span>09 SONS À CHOISIR</span><span>02 VERSIONS CHACUN</span><a href="#archives">VOIR LES ARCHIVES ↓</a></div>
+            <p>Quel garage pour préparer ton robot ? Compare les propositions 1, 4 et 5 et choisis ta forge préférée. Les votes sur les sons sont toujours ouverts plus bas.</p>
+            <div class="choices-hero-facts"><span>03 FORGES À COMPARER</span><a href="#forge">CHOISIR LA FORGE ↓</a><a href="#sons-jeu">ÉCOUTER LES SONS ↓</a><a href="#archives">VOIR LES ARCHIVES ↓</a></div>
           </div>
+        </section>
+
+        <section class="forge-section section-pad" id="forge" aria-labelledby="forge-title">
+          <div class="wrap">
+            <div class="sound-vote-heading forge-heading">
+              <div><p class="section-index"><span>NOUVELLE FORGE</span> / PROPOSITIONS 1 · 4 · 5</p><h2 id="forge-title">TON ROBOT,<br><em>TON ATELIER.</em></h2></div>
+              <p>Trois compositions pour le garage. Agrandis les images pour comparer, puis enregistre ta préférée. Ce sont des maquettes d’ambiance pour la future forge.</p>
+            </div>
+            <form id="forge-vote-form" class="forge-vote">
+              <label class="vote-name-label" for="forge-voter-name">TON PRÉNOM
+                <input class="vote-name-input" id="forge-voter-name" name="forge-voter-name" maxlength="24" autocomplete="given-name" required placeholder="Ton prénom">
+              </label>
+              <fieldset class="forge-options">
+                <legend class="sr-only">Choisis la proposition 1, 4 ou 5 pour la nouvelle forge</legend>
+                <article class="forge-option" id="forge-1">
+                  <a class="forge-preview-link" href="./assets/forge/forge-1-atelier.png" target="_blank" rel="noopener" data-forge-preview data-forge-title="1 — Atelier de récupération" aria-label="Agrandir la proposition 1 : atelier de récupération">
+                    <img src="./assets/forge/forge-1-atelier.png" width="1672" height="941" alt="Proposition 1 : robot entier au centre d’un atelier chaleureux, menus à gauche et armes à droite." decoding="async">
+                    <span>AGRANDIR ↗</span>
+                  </a>
+                  <label class="forge-option-label" for="forge-layout-1">
+                    <input type="radio" id="forge-layout-1" name="forge-layout" value="1" required>
+                    <span class="forge-option-number">01</span>
+                    <span class="forge-option-copy"><strong>ATELIER DE RÉCUPÉRATION</strong><span>Robot au centre, lumière dorée et commandes sur les côtés.</span></span>
+                    <span class="forge-option-pick">CHOISIR LA 1 ↗</span>
+                  </label>
+                </article>
+                <article class="forge-option" id="forge-4">
+                  <a class="forge-preview-link" href="./assets/forge/forge-4-etabli.png" target="_blank" rel="noopener" data-forge-preview data-forge-title="4 — Établi interactif" aria-label="Agrandir la proposition 4 : établi interactif">
+                    <img src="./assets/forge/forge-4-etabli.png" width="1672" height="941" loading="lazy" alt="Proposition 4 : atelier vu en plongée, robot sur une plateforme et armes posées sur l’établi au premier plan." decoding="async">
+                    <span>AGRANDIR ↗</span>
+                  </a>
+                  <label class="forge-option-label" for="forge-layout-4">
+                    <input type="radio" id="forge-layout-4" name="forge-layout" value="4">
+                    <span class="forge-option-number">04</span>
+                    <span class="forge-option-copy"><strong>ÉTABLI INTERACTIF</strong><span>Vue en plongée, armes et modules directement sur l’établi.</span></span>
+                    <span class="forge-option-pick">CHOISIR LA 4 ↗</span>
+                  </label>
+                </article>
+                <article class="forge-option" id="forge-5">
+                  <a class="forge-preview-link" href="./assets/forge/forge-5-inspection.png" target="_blank" rel="noopener" data-forge-preview data-forge-title="5 — Inspection rapprochée" aria-label="Agrandir la proposition 5 : inspection rapprochée">
+                    <img src="./assets/forge/forge-5-inspection.png" width="1672" height="941" loading="lazy" alt="Proposition 5 : robot en gros plan, commandes autour de son bras et armes accrochées au mur de l’atelier." decoding="async">
+                    <span>AGRANDIR ↗</span>
+                  </a>
+                  <label class="forge-option-label" for="forge-layout-5">
+                    <input type="radio" id="forge-layout-5" name="forge-layout" value="5">
+                    <span class="forge-option-number">05</span>
+                    <span class="forge-option-copy"><strong>INSPECTION RAPPROCHÉE</strong><span>Gros plan sur les pièces du robot et sélection sur le râtelier.</span></span>
+                    <span class="forge-option-pick">CHOISIR LA 5 ↗</span>
+                  </label>
+                </article>
+              </fieldset>
+              <div class="sound-vote-action forge-vote-action"><button class="button button-primary" type="submit">ENREGISTRER MA FORGE <span aria-hidden="true">↗</span></button><p class="sound-vote-status" id="forge-vote-status" role="status" aria-live="polite"></p></div>
+            </form>
+            <div class="choice-results" aria-labelledby="forge-results-title"><div class="choice-results-head"><h3 id="forge-results-title">VOTES SUR LA FORGE</h3><button id="refresh-forge" type="button">ACTUALISER ↻</button></div><p id="forge-results-status" role="status" aria-live="polite">Chargement des choix…</p><div id="forge-results-list" class="choice-results-list"></div></div>
+          </div>
+          <dialog id="forge-preview" class="forge-preview-dialog" aria-labelledby="forge-preview-title">
+            <div class="forge-preview-bar"><strong id="forge-preview-title"></strong><form method="dialog"><button type="submit" aria-label="Fermer l’image agrandie">FERMER ×</button></form></div>
+            <img id="forge-preview-image" alt="">
+          </dialog>
         </section>
 
         <section class="game-sfx-section section-pad" id="sons-jeu" aria-labelledby="game-sfx-title">

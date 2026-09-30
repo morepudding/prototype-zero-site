@@ -10,6 +10,7 @@ const equipment = [
   {id:'omnivamp', name:'OMNIVAMP', category:'PASSIF', description:'Récupère une part des dégâts infligés.', variants:['Siphon circulaire','Griffe et réservoir d’énergie']}
 ];
 const soundNames = {impulsion:'Impulsion',plasma:'Plasma',charge:'Charge'};
+const forgeLayouts = {'1':'ATELIER DE RÉCUPÉRATION','4':'ÉTABLI INTERACTIF','5':'INSPECTION RAPPROCHÉE'};
 const gameSfx = [
   {id:'drone-launch', archived:true, name:'MODULO DRONE', action:'LANCEMENT', variants:['Éjection mécanique','Moteur qui démarre']},
   {id:'pyro-dash', archived:true, name:'PYRO BOOTS', action:'DASH', variants:['Propulsion','Glissement métallique']},
@@ -37,6 +38,11 @@ const currentGameSfx = gameSfx.filter(item => !item.archived);
 const archivedGameSfx = gameSfx.filter(item => item.archived);
 const nameInput = document.getElementById('voter-name');
 const sfxNameInput = document.getElementById('sfx-voter-name');
+const forgeNameInput = document.getElementById('forge-voter-name');
+const voterNameInputs = [nameInput, sfxNameInput, forgeNameInput];
+const forgeForm = document.getElementById('forge-vote-form');
+const forgeResultsStatus = document.getElementById('forge-results-status');
+const forgeResultsList = document.getElementById('forge-results-list');
 const resultsStatus = document.getElementById('choice-results-status');
 const resultsList = document.getElementById('choice-results-list');
 const archivedResultsList = document.getElementById('archived-choice-results-list');
@@ -46,6 +52,7 @@ try {
   localStorage.setItem('prototype0-voter-id', voterId);
   nameInput.value = localStorage.getItem('prototype0-voter-name') || '';
   sfxNameInput.value = nameInput.value;
+  forgeNameInput.value = nameInput.value;
 } catch (_) {
   voterId = crypto.randomUUID();
 }
@@ -53,15 +60,33 @@ try {
 function savedChoice(key) {
   try { return localStorage.getItem(key); } catch (_) { return null; }
 }
-for (const input of [nameInput, sfxNameInput]) {
+for (const input of voterNameInputs) {
   input.addEventListener('input', () => {
-    const other = input === nameInput ? sfxNameInput : nameInput;
-    other.value = input.value;
-    nameInput.setCustomValidity('');
-    sfxNameInput.setCustomValidity('');
+    for (const other of voterNameInputs) {
+      other.value = input.value;
+      other.setCustomValidity('');
+    }
     try { localStorage.setItem('prototype0-voter-name', input.value); } catch (_) { /* The form remains usable. */ }
   });
 }
+
+const storedForge = savedChoice('prototype0-forge-layout');
+if (forgeLayouts[storedForge]) forgeForm.querySelector(`input[value="${storedForge}"]`).checked = true;
+const forgePreview = document.getElementById('forge-preview');
+for (const link of document.querySelectorAll('[data-forge-preview]')) {
+  link.addEventListener('click', event => {
+    if (typeof forgePreview.showModal !== 'function') return;
+    event.preventDefault();
+    const previewImage = document.getElementById('forge-preview-image');
+    previewImage.src = link.href;
+    previewImage.alt = link.querySelector('img').alt;
+    document.getElementById('forge-preview-title').textContent = link.dataset.forgeTitle;
+    forgePreview.showModal();
+  });
+}
+forgePreview.addEventListener('click', event => {
+  if (event.target === forgePreview) forgePreview.close();
+});
 
 for (const [index, item] of equipment.entries()) {
   const section = document.createElement('section');
@@ -127,8 +152,8 @@ for (const item of gameSfx) {
   if (stored === 'a' || stored === 'b') section.querySelector(`input[value="${stored}"]`).checked = true;
 }
 
-function requireName() {
-  const activeInput = document.activeElement?.closest('#sons-jeu') ? sfxNameInput : nameInput;
+function requireName(nameField) {
+  const activeInput = nameField || (document.activeElement?.closest('#sons-jeu') ? sfxNameInput : nameInput);
   const name = activeInput.value.trim().replace(/\s+/g, ' ');
   activeInput.setCustomValidity(name ? '' : 'Saisis ton prénom pour enregistrer tes choix.');
   if (!activeInput.reportValidity()) {
@@ -138,8 +163,8 @@ function requireName() {
   return name;
 }
 
-async function saveVote(button, status, payload, storageKey) {
-  const name = requireName();
+async function saveVote(button, status, payload, storageKey, nameField) {
+  const name = requireName(nameField);
   if (!name) return;
   button.disabled = true;
   status.textContent = 'Enregistrement en cours…';
@@ -159,6 +184,15 @@ async function saveVote(button, status, payload, storageKey) {
     button.disabled = false;
   }
 }
+
+forgeForm.addEventListener('submit', event => {
+  event.preventDefault();
+  const selected = forgeForm.querySelector('input[type="radio"]:checked');
+  if (!selected || !forgeForm.reportValidity()) return;
+  saveVote(forgeForm.querySelector('button[type="submit"]'), document.getElementById('forge-vote-status'), {
+    kind:'forge', value:selected.value
+  }, 'prototype0-forge-layout', forgeNameInput);
+});
 
 equipmentList.addEventListener('submit', event => {
   const form = event.target.closest('.equipment-vote');
@@ -195,6 +229,20 @@ for (const list of [gameSfxList, archivedGameSfxList]) list.addEventListener('su
 });
 
 function renderChoices(choices) {
+  forgeResultsList.replaceChildren();
+  const forgeVotes = choices.filter(choice => forgeLayouts[choice.forge]);
+  forgeResultsStatus.textContent = forgeVotes.length ? `${forgeVotes.length} vote${forgeVotes.length > 1 ? 's' : ''} sur la forge.` : 'Aucun vote sur la forge pour le moment.';
+  for (const [value, label] of Object.entries(forgeLayouts)) {
+    const voters = forgeVotes.filter(choice => choice.forge === value);
+    const row = document.createElement('div');
+    row.className = 'choice-tally';
+    const title = document.createElement('strong');
+    title.textContent = `${value} — ${label}`;
+    const counts = document.createElement('span');
+    counts.textContent = `${voters.length} vote${voters.length > 1 ? 's' : ''}${voters.length ? ` · ${voters.map(choice => choice.name).join(', ')}` : ''}`;
+    row.append(title, counts);
+    forgeResultsList.append(row);
+  }
   resultsList.replaceChildren();
   archivedResultsList.replaceChildren();
   resultsStatus.textContent = choices.length ? `${choices.length} personne${choices.length > 1 ? 's ont' : ' a'} enregistré des choix.` : 'Aucun choix enregistré pour le moment.';
@@ -233,15 +281,18 @@ function renderChoices(choices) {
 }
 async function refreshChoices() {
   resultsStatus.textContent = 'Chargement des choix…';
+  forgeResultsStatus.textContent = 'Chargement des choix…';
   try {
     const response = await fetch('/api/choices', {cache:'no-store'});
     if (!response.ok) throw new Error('Unavailable');
     renderChoices((await response.json()).choices);
   } catch (_) {
     resultsStatus.textContent = 'Les choix enregistrés sont momentanément indisponibles.';
+    forgeResultsStatus.textContent = resultsStatus.textContent;
   }
 }
 document.getElementById('refresh-choices').addEventListener('click', refreshChoices);
+document.getElementById('refresh-forge').addEventListener('click', refreshChoices);
 refreshChoices();
 
 // Keep direct links usable for proposals inside the collapsed archive.

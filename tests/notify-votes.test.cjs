@@ -31,3 +31,11 @@ test('includes game sound votes in the summary', () => {
 test('ignores malformed queued events', () => {
   assert.equal(summarize(['oops', '{}']), null);
 });
+
+test('includes a forge choice once when the voter changes their preference', () => {
+  const summary = summarize([
+    { id: 'one', name: 'Ben', kind: 'forge' },
+    { id: 'one', name: 'Ben', kind: 'forge', changed: true }
+  ]);
+  assert.match(summary, /Ben\*\* a enregistré 1 choix : nouvelle forge/);
+});
