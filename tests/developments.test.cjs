@@ -53,6 +53,8 @@ test('real Redis: races, same-session retries, stale fencing, local work and pub
     const retry = await mutate(redis, winner.actor, ownerBody, defaults, now + 100, key);
     assert.equal(retry.record.id, winner.id);
     const auth = { id: winner.id, leaseToken: winner.leaseToken, session: winner.session };
+    await confirmPublished(redis, [{ id: winner.id, commit: 'b'.repeat(40) }], now + 150, key);
+    assert.equal((await listDevelopments(redis, now + 151, key)).find(r => r.id === winner.id).status, 'active');
     assert.equal((await mutate(redis, winner.actor, { ...auth, action: 'heartbeat', leaseToken: randomUUID() }, [], now + 200, key)).error, 'ownership');
     const unrelated = await mutate(redis, 'akomoses', { ...body('session-gamma'), title: 'Améliorer la visée du duel', topic: 'ia-visee-duel', files: ['scripts/duel_bot_state.gd'] }, defaults, now + 200, key);
     assert.ok(unrelated.record);
